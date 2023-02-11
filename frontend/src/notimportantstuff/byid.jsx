@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Route, Link, useParams } from "react-router-dom";
 import axios from "axios";
 
-export default function Home() {
+function ById() {
+    const { id } = useParams(null);
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,11 +12,11 @@ export default function Home() {
         const getData = async () => {
             try {
                 const response = await axios.get(
-                    `http://127.0.0.1:8000`
+                    `http://127.0.0.1:8000/${id}`
                 );
                 setData(response.data);
                 setError(null);
-                console.log(data.id);
+                console.log(data.task);
             } catch (err) {
                 setError(err.message);
                 setData(null);
@@ -34,6 +36,4 @@ export default function Home() {
     )
 }
 
-
-
-//https://codesandbox.io/s/react-router-dom-example-8vcqu?from-embed    
+export default ById;
