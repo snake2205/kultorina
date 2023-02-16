@@ -3,37 +3,31 @@ import { BrowserRouter, Route, Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 function ById() {
-    const { id } = useParams(null);
-    const [data, setData] = useState({});
-    const [loading, setLoading] = useState(true);
+    const { id } = useParams(0);
+    const [loading, setLoading] = useState({});
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await axios.get(
-                    `http://127.0.0.1:8000/${id}`
-                );
-                setData(response.data);
-                setError(null);
-                console.log(data.task);
-            } catch (err) {
-                setError(err.message);
-                setData(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-        getData();
-    }, [loading]);
+        const news = async () => {
+            const data = {
+                "username": "admin",
+                "password": "root"
+            };
+            const payload = new FormData(); 
+            payload.append(`username`, "admin");
+            payload.append(`password`, "root");
+            const config = { headers: { 'Content-Type': 'application/json' } }
+            axios.post("http://127.0.0.1:8000/auth/login", payload).then((res) => { console.log(res); });
+        }
+        news();
+    });
 
-    return (
-        <>
-            <div className="Home">
-                {!loading && <p>asd</p>}
-            </div>
-        </>
-    )
+        return (
+            <>
+                <div className="Home">
+                </div>
+            </>
+        );
 }
 
 export default ById;

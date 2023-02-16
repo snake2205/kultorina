@@ -4,6 +4,7 @@ import Home from "./home";
 import Login from "./login";
 import Signup from "./signup";
 import NavBar from "./components/navbar";
+import ById from "../notimportantstuff/byid";
 
 function WSRoutes() {
     return (
@@ -13,8 +14,9 @@ function WSRoutes() {
                 <Route index element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/asd" element={<ById />} />
             </Route>
-        </Routes>
+            </Routes>
     </BrowserRouter>
     )
 }

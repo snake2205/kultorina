@@ -8,6 +8,7 @@ backend:
 	fastapi
 	pydantic
 	uvicorn
+	jwt
 frontend:
 	node.js
 	reactjs
@@ -20,11 +21,11 @@ password:pienadiena
 nosaukums:kultorina_demo
 
 ALSO lai uzsāktu aplikāciju:
-front end:
+back end:
 cmd promtā jāaiziet uz backend folderi un jāpalaiž
 uvicorn main:app --reload
 
-back end:
+front end:
 cmd promptā jāaiziet uz frontend folderi un jāpalaiž
 npm start
 	
