@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./home";
-import Login from "./login";
-import Signup from "./signup";
-import Logout from "./logout";
+import Login from "./auth/login";
+import Signup from "./auth/signup";
+import Logout from "./auth/logout";
 import NavBar from "./components/navbar";
 
 function WSRoutes() {

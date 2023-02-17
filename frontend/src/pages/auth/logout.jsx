@@ -1,4 +1,4 @@
-import Logout_Form from "./components/forms/logout_form";
+import Logout_Form from "../components/forms/logout_form";
 function Logout() {
     return (
         <>
