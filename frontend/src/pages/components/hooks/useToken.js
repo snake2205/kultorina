@@ -11,14 +11,19 @@ export function useToken() {
         }
     };
 
-    const [ token, setToken ] = useState(getToken());
+    const [ token, setToken, destroyToken ] = useState(getToken());
 
     const saveToken = userToken => {
         sessionStorage.setItem('token', JSON.stringify(userToken));
         setToken(userToken.token);
     };
 
+    const deleteToken = userToken => {
+        sessionStorage.removeItem('token');
+    };
+
     return {
+        destroyToken: deleteToken,
         setToken: saveToken,
         token
     }

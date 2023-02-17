@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./home";
 import Login from "./login";
 import Signup from "./signup";
+import Logout from "./logout";
 import NavBar from "./components/navbar";
-import ById from "../notimportantstuff/byid";
 
 function WSRoutes() {
     return (
@@ -14,7 +14,7 @@ function WSRoutes() {
                 <Route index element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/asd" element={<ById />} />
+                <Route path="/logout" element={<Logout />} />
             </Route>
             </Routes>
     </BrowserRouter>

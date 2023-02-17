@@ -1,5 +1,9 @@
 from pydantic import BaseModel
 from typing import Union
+from fastapi import Form
+
+from dataclasses import dataclass
+
 
 class TokenData(BaseModel):
     username: Union[str, None] = None
@@ -12,3 +16,9 @@ class User(BaseModel):
     username: str
     email: Union[str, None] = None
     id: Union[int, None]= None
+
+@dataclass
+class UserSignUp:
+    username: str = Form(...)
+    password: str = Form(...)
+    email: str= Form(...)
