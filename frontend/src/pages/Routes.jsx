@@ -5,6 +5,7 @@ import Login from "./auth/login";
 import Signup from "./auth/signup";
 import Logout from "./auth/logout";
 import NavBar from "./components/navbar";
+import Data_Upload from "./auth/data_upload"
 
 function WSRoutes() {
     return (
@@ -15,6 +16,8 @@ function WSRoutes() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/logout" element={<Logout />} />
+                <Route path="/data_upload" element={<Data_Upload />} />
+
             </Route>
             </Routes>
     </BrowserRouter>
