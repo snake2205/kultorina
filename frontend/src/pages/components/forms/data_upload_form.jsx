@@ -15,9 +15,10 @@ function Data_Upload_Form() {
     // https://www.npmjs.com/package/react-drag-drop-files rekur ir links uz dokumentaciju backend gudriniekam
     const onSubmit = (data, e) => {
         const payload = new FormData(); {/* izveido FormData() instanci payload */ }
-        payload.append(`username`, data.username); {/* pievieno payload datus no formas */ }
-        payload.append(`password`, data.password);
-        axios.post("http://127.0.0.1:8000/auth/login", payload) 
+        payload.append(`file_kategorija`, data.file_kategorija); {/* pievieno payload datus no formas */ }
+        payload.append(`lauka_nosaukums`, data.lauka_nosaukums);
+        payload.append(`file_dati`, data.file_dati);
+        axios.post("http://127.0.0.1:8000/admin/data_upload", payload) 
             .then((res) => { setToken(res.data); setError(<Navigate to="/" />);})
             .catch((err) => {
                 setError(return_error(err));
