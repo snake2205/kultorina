@@ -5,6 +5,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from database import Base, engine, SessionLocal, get_session
 from models import models
+from schemas.auth_schemas import DataUpload
 
 router = APIRouter(
     prefix="/admin",
@@ -14,9 +15,10 @@ router = APIRouter(
 
 Base.metadata.create_all(engine)
 
-@router.get("/append")
-def append(session: Session = Depends(get_session)):
-    items = session.query(models.Item).all()
-    return items
+
+
+@router.post("/data_upload")
+def append(form_data: DataUpload = Depends(), session: Session = Depends(get_session)):
+    return form_data.data.filename
 
 

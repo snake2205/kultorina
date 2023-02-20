@@ -15,9 +15,9 @@ function Data_Upload_Form() {
     // https://www.npmjs.com/package/react-drag-drop-files rekur ir links uz dokumentaciju backend gudriniekam
     const onSubmit = (data, e) => {
         const payload = new FormData(); {/* izveido FormData() instanci payload */ }
-        payload.append(`file_kategorija`, data.file_kategorija); {/* pievieno payload datus no formas */ }
-        payload.append(`lauka_nosaukums`, data.lauka_nosaukums);
-        payload.append(`file_dati`, data.file_dati);
+        payload.append(`categories`, data.categories[0]); {/* pievieno payload datus no formas */ }
+        payload.append(`field`, data.field);
+        payload.append(`data`, data.data[0]);
         axios.post("http://127.0.0.1:8000/admin/data_upload", payload)
             .then((res) => { setToken(res.data); setError(<Navigate to="/" />); })
             .catch((err) => {
@@ -32,11 +32,11 @@ function Data_Upload_Form() {
             <form onSubmit={handleSubmit(onSubmit)}>{/* kas uzspiež submit tiek izsaukta funkcija onSubmit */}
 
                 <label>Kategorijas:</label><br />
-                <FileUploader name="file_kategorija" types={fileTypes} maxSize={1} />
+                <input {...register("categories")} type="file" /><br />
                 <label>Dati:</label><br />
-                <FileUploader name="file_dati" types={fileTypes} maxSize={1} />
+                <input {...register("data")} type="file" /><br />
                 <label>Lauka nosaukums:</label><br />
-                <input {...register("lauka_nosaukums")} type="text" /><br />
+                <input {...register("field")} type="text" /><br />
                 <label>Vēlos aizsūtīt failus!</label><br />
                 <input type="submit" />
 
