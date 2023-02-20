@@ -26,15 +26,10 @@ function Signup_Form() {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label>Elektroniskā pasta adrese:</label><br />
-                <select id="field" name="field" size="2">
-                    <option value="Foto">Fotogrāfijas</option>
-                    <option value="Audio">Mūzika</option>
-                </select>
-                <label>Lietotājvārds:</label><br />
+                <label>mediju tips:</label><br />
                 <input {...register("username")} type="text" /><br />
-                <label>Parole:</label><br />
-                <input {...register("password")} type="text" /><br />
+                <label>jautajuma veids:</label><br />
+                <input {...register("username")} type="text" /><br />
                 <button>Informācija ir ievadīta!</button>
             </form>
             <p>{error}</p>
