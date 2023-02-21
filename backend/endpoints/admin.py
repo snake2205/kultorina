@@ -14,7 +14,7 @@ router = APIRouter(
 
 Base.metadata.create_all(engine)
 
-@router.get("/append")
+@router.get("/data_upload")
 def append(session: Session = Depends(get_session)):
     items = session.query(models.Item).all()
     return items

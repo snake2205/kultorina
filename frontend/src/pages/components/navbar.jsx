@@ -7,7 +7,7 @@ import Es_Neesmu_Dzeina_Bonda from "./Sidebar";
 function NavBar() {
     return (
         <>
-        <div><Outlet />
+            <div>
             <nav>
                 <ul>
                     <li>
@@ -31,10 +31,10 @@ function NavBar() {
                 </ul>
             </nav>
             </div>
+            <Outlet />
          <div>
          <ProSidebarProvider>
             <Es_Neesmu_Dzeina_Bonda />
-            
         </ProSidebarProvider>
         </div>
         </>
