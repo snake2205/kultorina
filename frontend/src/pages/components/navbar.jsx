@@ -18,6 +18,12 @@ function NavBar() {
                     <li>
                         <Link to="/logout">Logout</Link>
                     </li>
+                    <li>
+                        <Link to="/data_upload">Datu augšupielāde</Link>
+                    </li>
+                    <li>
+                        <Link to="/make_quiz">Izveido viktorīnu!!!</Link>
+                    </li>
                 </ul>
             </nav>
             <Outlet />

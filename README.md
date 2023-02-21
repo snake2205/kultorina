@@ -24,8 +24,6 @@ ALSO lai uzsāktu aplikāciju:
 back end:
 cmd promtā jāaiziet uz backend folderi un jāpalaiž
 uvicorn main:app --reload
-VAI
-py -m pip install bcrypt
 
 front end:
 cmd promptā jāaiziet uz frontend folderi un jāpalaiž
