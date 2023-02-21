@@ -1,5 +1,4 @@
 ﻿import React, { useState } from "react";
-import { FileUploader } from "react-drag-drop-files";
 import { Link, Outlet } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
