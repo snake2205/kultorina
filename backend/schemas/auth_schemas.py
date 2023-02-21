@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Union
-from fastapi import Form, File, UploadFile
+from fastapi import Form
 
 from dataclasses import dataclass
 
@@ -22,9 +22,3 @@ class UserSignUp:
     username: str = Form(...)
     password: str = Form(...)
     email: str= Form(...)
-
-@dataclass
-class DataUpload:
-    field: str = Form(...)
-    categories: UploadFile = File(...)
-    data: UploadFile = File(...)

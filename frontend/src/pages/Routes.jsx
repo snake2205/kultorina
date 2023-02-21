@@ -13,7 +13,7 @@ function WSRoutes() {
     <BrowserRouter>
         <Routes>
             <Route path="/" element={ <NavBar />}>
-                <Route index element={<Home />} />
+                <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/logout" element={<Logout />} />
