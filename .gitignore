@@ -1,3 +1,2 @@
 .vs/
-*.pys
-backend/__pycache__
+*.pyc
