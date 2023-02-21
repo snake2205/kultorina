@@ -1,4 +1,4 @@
-﻿from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi import Query, Form
 from typing import Optional, Union
 
@@ -28,7 +28,7 @@ def getItems(session: Session = Depends(get_session)):
 
 @router.post("/login", response_model=Token)
 def Login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    form_data: OAuth2PasswordRequestForm = Depends()    ,
     session: Session = Depends(get_session)
     ):
     user = auth_methods.authenticate_user( session, form_data.username, form_data.password)
@@ -43,24 +43,20 @@ def Login(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.post("/signup", response_model=Token) # definē šīs funkcijas url, definē izejas datu struktūru (skat schemas.auth_schemas)
+@router.post("/signup", response_model=Token)
 def SignUp(form_data: UserSignUp = Depends(),  session: Session = Depends(get_session)):
-#form_data ir inputs no front end, tas atbilst noteiktai struktūrai UserSignUp (skat schemas.auth_schemas), ja dati neatbilst sai strukturai metīs erroru
-#session ir pieslēgums datubāzei. to var atstāt kā ir
     if session.query(models.Users).filter(models.Users.email == form_data.email).first() is not None and session.query(models.Users).filter(models.Users.username == form_data.username).first() is not None:
-    #session.query(models.Users) atrod modelim atbilstošo tabulu datubāzē. models.Users (skat models.models) ir struktūra datubāzes tabulām.
-    #.filter atrod visus tabulas elementus kuru emails vienāds ar form_data inputu. šis viss ir no sqlalchemy package
         raise HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
-        detail="User with this email or username already exists")# izmet error, ja username vai email jau eksistē tabulā.
+        detail="User with this email or username already exists")
     else:
-        user = models.Users(username = form_data.username, password = auth_methods.get_password_hash(form_data.password), email = form_data.email)#izveido models.Users rindu (objektu)
-        session.add(user) #pievieno datubāzei user elementus (man sķiet ka, ja šāda tabula vēl neeksistē tā tiks automātiski izveidota)
-        session.commit() # commito izmaiņas
+        user = models.Users(username = form_data.username, password = auth_methods.get_password_hash(form_data.password), email = form_data.email)
+        session.add(user)
+        session.commit()
         access_token = auth_methods.create_access_token(
             data={"sub": user.username}
-        ) # izveido access_token, kas ļauj ielogoties lietotājam 
-        return {"access_token": access_token, "token_type": "bearer"} # returno tokenu atbilstoši iepriekš definētajai struktūrai
+        )
+        return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/users/me/")
 async def read_users_me(current_user: User = Depends(auth_methods.get_current_user)):
