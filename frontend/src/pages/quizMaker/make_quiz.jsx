@@ -1,9 +1,8 @@
-import Sigma from "../components/forms/free_from_desire";
+import Make_Quiz_Form from "../components/forms/make_quiz_form";
 function Make_Quiz() {
     return (
         <>
-            <h1></h1>
-            <Sigma />
+            <Make_Quiz_Form />
         </>
     );
 }
