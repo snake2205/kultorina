@@ -60,7 +60,7 @@ function Make_Quiz_Form() {
         payload.append("field", data.map((e) => e.field));
         payload.append("question", data.map((e) => e.question));
         console.log(data);
-        axios.post("http://127.0.0.1:8000/make_quiz/quiz_form", payload);
+        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload);
     }
     return (
         <div className="App">
