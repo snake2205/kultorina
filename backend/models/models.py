@@ -17,25 +17,26 @@ class Users(Base):
     password = Column(String(100))
     email = Column(String(100))
 
-class fields(Base):
+class Fields(Base):
     __tablename__ = 'fields'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(256))  
-    children = relationship("categories")
+    #children = relationship("categories")
 
-class categories(Base):
+class Categories(Base):
     __tablename__ = 'categories'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(256))  
     field_id = Column (Integer, ForeignKey("fields.id"))
-    if field_id == '1':
-        children = relationship("fotodata")
+    #if field_id == '1':
+     #   children = relationship("foto_data")
 
-class fotodata(Base):
+class FotoData(Base):
     __tablename__ = 'foto_data'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(256))
     url = Column(String(256))
+    image = Column(String(256)) 
     latitude = Column(Float)
     longitude = Column(Float)
     field_id = Column (Integer, ForeignKey("fields.id"))
