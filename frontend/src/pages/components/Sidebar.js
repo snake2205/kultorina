@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
-import { Sidebar, Menu, MenuItem, useProSidebar } from "react-pro-sidebar";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
@@ -8,6 +6,10 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import React from "react";
+import { Link, Outlet } from "react-router-dom";
+import { Sidebar, Menu, MenuItem, useProSidebar, ProSidebarProvider  } from "react-pro-sidebar";
+
 
 function Es_Neesmu_Dzeina_Bonda() {
   const { collapseSidebar, rtl } = useProSidebar();
@@ -34,9 +36,10 @@ function Es_Neesmu_Dzeina_Bonda() {
         </Menu>
       </Sidebar>
       <main>
-        <h1 style={{ color: "black", marginRight: "5rem" }}>
-          Mr. Čīča
-        </h1>
+        <h2 style={{ color: "black", marginRight: "35rem" }}>
+       
+            <Outlet />
+        </h2>
       </main>
       </div>
     );
