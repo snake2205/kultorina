@@ -9,7 +9,8 @@ function NavBar() {
         <>
 
         <div>
-         <ProSidebarProvider>
+        <Outlet />
+        <ProSidebarProvider>
             <Es_Neesmu_Dzeina_Bonda />
         </ProSidebarProvider>
         </div>
