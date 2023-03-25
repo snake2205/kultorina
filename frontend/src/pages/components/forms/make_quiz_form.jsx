@@ -7,6 +7,8 @@ import { return_error } from "../errors/errorHandling";
 import { Navigate } from "react-router-dom";
 
 function Make_Quiz_Form() {
+    const [state, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
     const [selected, setSelected] = useState();
     const { register, handleSubmit } = useForm();
 
@@ -48,11 +50,11 @@ function Make_Quiz_Form() {
 
         setInputFields([...inputFields, newfield])
     }
-    const removeFields = (event, index) => {
-        event.preventDefault();
+    const removeFields = (index) => {
         let data = [...inputFields];
-        data.splice(index, 1)
-        setInputFields(data)
+        data.splice(index, 1);
+        setInputFields(data);
+        forceUpdate();
     }
     const onSubmit = (e) => {
         let data = [...inputFields];
@@ -69,15 +71,15 @@ function Make_Quiz_Form() {
                     return (
                         <div key={index}>
                             <label>mediju tips: </label>
-                            <select defaultValue={input.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
+                            <select value={input.question} defaultValue={input.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
                                 <option value="foto">Foto</option>
                                 <option value="audio">Audio</option>
                             </select>
                             <label>jautajuma veids: </label>
-                            <select defaultValue={input.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
+                            <select value={input.question} defaultValue={ input.question } name="question" id="question" onChange={event => handleFormChange(index, event)}>
                                 {input.options}
                             </select>
-                            <button onClick={event => removeFields(event, index)}>Lauks tiek atņemts!</button>
+                            <button onClick={() => removeFields(index)}>Lauks tiek atņemts!</button>
 
                         </div>
                     )

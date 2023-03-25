@@ -4,7 +4,7 @@ import Home from "./home";
 import Login from "./auth/login";
 import Signup from "./auth/signup";
 import Logout from "./auth/logout";
-import NavBar from "./components/navbar";
+import NavBar from "./components/design/navbar";
 import Data_Upload from "./auth/data_upload";
 import Make_Quiz from "./quizMaker/make_quiz";
 
@@ -13,7 +13,7 @@ function WSRoutes() {
     <BrowserRouter>
         <Routes>
             <Route path="/" element={ <NavBar />}>
-                <Route path="/home" element={<Home />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/logout" element={<Logout />} />
