@@ -20,7 +20,7 @@ class Users(Base):
 class Fields(Base):
     __tablename__ = 'fields'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(256))  
+    name = Column(String(256))
     #children = relationship("categories")
 
 class Categories(Base):

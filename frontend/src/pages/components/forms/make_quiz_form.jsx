@@ -18,6 +18,10 @@ function Make_Quiz_Form() {
     let options = null;
     let type = null;
 
+    const [inputFields, setInputFields] = useState([
+        { field: 'foto', question: FotoQ[0], options: FotoQ.map((el) => <option key={el}>{el}</option>), image:""}
+    ])
+
     const changeSelectOptionHandler = (index, event) => {
         let data = [...inputFields];
         data[index][event.target.name] = event.target.value;
@@ -34,10 +38,6 @@ function Make_Quiz_Form() {
 
         console.log(data);
     };
-
-    const [inputFields, setInputFields] = useState([
-        { field: 'foto', question: FotoQ[0], options: FotoQ.map((el) => <option key={el}>{el}</option>) }
-    ])
     const handleFormChange = (index, event) => {
         let data = [...inputFields];
         data[index][event.target.name] = event.target.value;
@@ -54,22 +54,29 @@ function Make_Quiz_Form() {
         let data = [...inputFields];
         data.splice(index, 1);
         setInputFields(data);
-        forceUpdate();
     }
     const onSubmit = (e) => {
         let data = [...inputFields];
-        const payload = new FormData(); {/* izveido FormData() instanci payload */ }
+        const payload = new FormData();
         payload.append("field", data.map((e) => e.field));
         payload.append("question", data.map((e) => e.question));
         console.log(data);
-        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload);
+        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload)
+            .then((res) => {
+                data.forEach((e, i) => {
+                    e.image = res.data[i].image;
+                    forceUpdate();
+                })
+            })
     }
     return (
-        <div className="App">
+        <div className="text-center">
             <form onSubmit={handleSubmit(onSubmit)}>
                 {inputFields.map((input, index) => {
                     return (
-                        <div key={index}>
+                        <div key={index} >
+                            <img src={input.image} width="500px"></img>
+                            <br />
                             <label>mediju tips: </label>
                             <select value={input.question} defaultValue={input.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
                                 <option value="foto">Foto</option>
@@ -79,12 +86,12 @@ function Make_Quiz_Form() {
                             <select value={input.question} defaultValue={ input.question } name="question" id="question" onChange={event => handleFormChange(index, event)}>
                                 {input.options}
                             </select>
-                            <button onClick={() => removeFields(index)}>Lauks tiek atņemts!</button>
+                            <button type="button" onClick={() => removeFields(index)}>Lauks tiek atņemts!</button>
 
                         </div>
                     )
                 })}
-                <button onClick={addFields}>Pievieno jaunu lauku beigās!</button>
+                <button type="button" onClick={addFields}>Pievieno jaunu lauku beigās!</button>
                 <input type="submit" />
 
             </form>

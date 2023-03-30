@@ -6,7 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from database import Base, engine, SessionLocal, get_session
 from models import models
-from schemas.auth_schemas import DataUpload
+from schemas.admin_schemas import DataUpload
 
 import json
 
