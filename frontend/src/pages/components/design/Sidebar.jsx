@@ -12,7 +12,7 @@ import { Link, Outlet } from "react-router-dom";
 
 function Sidebar() {
     const [width, setWidth] = React.useState(window.innerWidth);
-    const breakpoint = 620;
+    const breakpoint = 576;
 
     React.useEffect(() => {
         const handleWindowResize = () => setWidth(window.innerWidth)
@@ -43,7 +43,7 @@ function MobileSidebar() {
 
 function DesktopSidebar() {
     return (
-        <div className="col-2 bg-dark text-primary text-center">
+        <div className="col-2 bg-dark text-primary text-center h-100">
             <Links />
         </div>
     );
@@ -59,7 +59,7 @@ function Links() {
         </div>
         <div className="row p-2">
             <a href="/login" className="nav-link text-truncate">
-                <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Login</span>
+                    <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Login</span>
             </a>
         </div>
         <div className="row p-2">

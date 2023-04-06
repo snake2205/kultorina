@@ -41,3 +41,11 @@ class FotoData(Base):
     longitude = Column(Float)
     field_id = Column (Integer, ForeignKey("fields.id"))
     categories_id = Column (Integer, ForeignKey("categories.id"))
+
+class ReportedQuestions(Base):
+    __tablename__ = 'reported_questions'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    report_id = Column(Integer)
+    field_id = Column(Integer, ForeignKey("fields.id"))
+    votes = Column(Integer, default=int(1))
+    #children = relationship("categories")
