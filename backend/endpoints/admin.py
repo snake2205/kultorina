@@ -45,9 +45,9 @@ def append(
             c+=1
 
     for el in data:
-        if session.query(models.FotoData).filter_by(url=el["url"]).first() is None:
+        if session.query(models.Data).filter_by(url=el["url"]).first() is None:
             category = session.query(models.Categories).filter_by(name=el["category"]).first().id
-            question = models.FotoData(name = el["name"], url = el["url"], image = el["image"], latitude = el["latitude"], longitude = el["longitude"], field_id = id, categories_id = category )
+            question = models.Data(name = el["name"], url = el["url"], image = el["image"], latitude = el["latitude"], longitude = el["longitude"], field_id = id, categories_id = category )
             session.add(question)
             q+=1
     

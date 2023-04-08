@@ -36,6 +36,51 @@ function Question_Form({ inputField, index, changeInputField, removeInputField }
         changeInputField(data, index);
     }
 
+    var component = inputField.activated === true ?
+        <ActiveQuestion
+            inputField={inputField}
+            index={index}
+            changeSelectOptionHandler={changeSelectOptionHandler}
+            handleFormChange={handleFormChange}
+            removeInputField={removeInputField}
+            changeInputField={ changeInputField }
+        /> :
+        <NotActiveQuestion
+            inputField={inputField}
+            index={index}
+            changeSelectOptionHandler={changeSelectOptionHandler}
+            handleFormChange={handleFormChange}
+        />;
+
+    return (
+        component
+    )
+}
+
+function NotActiveQuestion({ inputField, index, changeSelectOptionHandler, handleFormChange }) {
+    return(
+        <div className="row py-2 mx-0">
+            <div className="col-11">
+                <div className="border border-dark border-1 bg-white p-2">
+                    <br />
+                    <div className="text-center">
+                        <label>mediju tips: </label>
+                        <select value={inputField.field} defaultValue={inputField.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
+                            <option value="foto">Foto</option>
+                            <option value="audio">Audio</option>
+                        </select>
+                        <label>jautajuma veids: </label>
+                        <select value={inputField.question} defaultValue={inputField.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
+                            {inputField.options}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFormChange, removeInputField, changeInputField}) {
     const refresh = (index) => {
         const payload = new FormData();
         payload.append("field", inputField.field);
@@ -59,33 +104,30 @@ function Question_Form({ inputField, index, changeInputField, removeInputField }
                 //forceUpdate();
             })
     }
-    return (
-        <div className="py-2">
-        <div className="border border-dark border-1 bg-white p-1">
-            <ShowInfo inputField={ inputField} />
-            <br />
-            <label>mediju tips: </label>
-            <select value={inputField.field} defaultValue={inputField.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
-                <option value="foto">Foto</option>
-                <option value="audio">Audio</option>
-            </select>
-            <label>jautajuma veids: </label>
-            <select value={inputField.question} defaultValue={inputField.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
-                {inputField.options}
-            </select>
-            <button type="button" onClick={() => removeInputField(index)}>Lauks tiek atņemts!</button>
-            <button type="button" onClick={() => refresh(index)}>Atjaunināt!</button>
-            <button type="button" onClick={() => report(index)}>Reportēt!</button>
-
+    return(
+        <div className="row py-2 mx-0">
+            <div className="col-11">
+                <div className="border border-dark border-1 bg-white p-2">
+                    <Info inputField={inputField} />
+                    <br />
+                    <div className="text-center">
+                        <label>mediju tips: </label>
+                        <select value={inputField.field} defaultValue={inputField.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
+                            <option value="foto">Foto</option>
+                            <option value="audio">Audio</option>
+                        </select>
+                        <label>jautajuma veids: </label>
+                        <select value={inputField.question} defaultValue={inputField.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
+                            {inputField.options}
+                        </select>
+                    </div>
+                </div>
             </div>
+            <OutsideButtons refresh={refresh} report={report} removeInputField={removeInputField} index={index} />
         </div>
     )
 }
 
-function ShowInfo({ inputField }) {
-    var Component = inputField.activated === true ? <Info inputField={inputField} /> : <></>;
-    return Component;
-}
 
 function Info({ inputField }) {
     return (
@@ -105,6 +147,28 @@ function Info({ inputField }) {
                 </ul>
             </div>
         <a href={inputField.quest.url}>{inputField.quest.url}</a>
+        </div>
+    )
+}
+
+function OutsideButtons({ report, refresh, removeInputField, index }) {
+    return (
+        <div className="col">
+            <div className="row py-1">
+                <button className="btn btn-danger btn-sm btn-square-md" type="button" onClick={() => report(index)} title="reportēt">
+                    <i className="bi bi-flag"></i>
+                </button>
+            </div>
+            <div className="row py-1">
+                <button className="btn btn-success btn-sm btn-square-md" type="button" onClick={() => refresh(index)} title="atjaunināt">
+                    <i className="bi bi-arrow-repeat"></i>
+                </button>
+            </div>
+            <div className="row py-1">
+                <button className="btn btn-secondary btn-sm btn-square-md" type="button" onClick={() => removeInputField(index)} title="dzēst">
+                    <i className="bi bi-trash"></i>
+                </button>
+            </div>
         </div>
     )
 }

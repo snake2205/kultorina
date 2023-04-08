@@ -14,7 +14,7 @@ function NavBar() {
                 </div>
             </div>
             <div className="row flex-grow-1" style={{ maxHeight: "93%" }}>
-                <div className="col-12 col-sm-10 h-100 overflow-auto">
+                <div className="col-12 col-sm-10 h-100 overflow-auto bg-light">
                     <Outlet />
                 </div>
                 <Sidebar />

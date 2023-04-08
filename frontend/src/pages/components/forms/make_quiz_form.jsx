@@ -46,7 +46,7 @@ function Make_Quiz_Form() {
         setInputFields([...inputFields, newfield])
     }
 
-    const onSubmit = (e) => {
+    const refreshAll = (event) => {
         let data = [...inputFields];
         const payload = new FormData();
         payload.append("field", data.map((e) => e.field));
@@ -61,10 +61,25 @@ function Make_Quiz_Form() {
                 setInputFields([...data]);
             })
     }
+
+    const startQuiz = (e) => {
+        let data = [...inputFields];
+        const payload = new FormData();
+        var arr =[]
+        data.map((e) => {
+            var myJsonString = JSON.stringify({ "field": e.field, "question": e.question, "id": e.quest.id, "fakes": e.quest.fakes });
+            arr.push(myJsonString);
+        })
+        var arr = JSON.stringify(arr);
+        payload.append("data", arr);
+        axios.post("http://127.0.0.1:8000/quiz/start_quiz", payload)
+            .then((res) => {
+                console.log(res);
+            })
+    }
     return (
-        <div className="row bg-light">
-            <div className="col-md-6 col-12 mx-auto">
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="row">
+            <div className="col-md-8 col-12 mx-auto">
                 {inputFields.map((input, index) => {
                     return (
                         <Question_Form
@@ -77,9 +92,8 @@ function Make_Quiz_Form() {
                     );
                 })}
                 <button type="button" onClick={addFields}>Pievieno jaunu lauku beigās!</button>
-                <input type="submit" />
-            
-            </form>
+                <button type="button" onClick={refreshAll}> Atsvaidzini visu! </button>
+                <button type="button" onClick={startQuiz}> Submit </button>
             </div>
         </div>
     );
