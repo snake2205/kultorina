@@ -7,6 +7,7 @@ import Logout from "./auth/logout";
 import NavBar from "./components/design/navbar";
 import Data_Upload from "./auth/data_upload";
 import Make_Quiz from "./quizMaker/make_quiz";
+import Start_Quiz from "./quizMaker/start_quiz";
 
 function WSRoutes() {
     return (
@@ -19,6 +20,7 @@ function WSRoutes() {
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/data_upload" element={<Data_Upload />} />
                 <Route path="/make_quiz" element={<Make_Quiz />} />
+                <Route path="/make_quiz/ws" element={<Start_Quiz />} />
             </Route>
             </Routes>
     </BrowserRouter>

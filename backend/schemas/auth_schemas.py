@@ -22,9 +22,3 @@ class UserSignUp:
     username: str = Form(...)
     password: str = Form(...)
     email: str= Form(...)
-
-@dataclass
-class DataUpload:
-    categories: UploadFile = File(...)
-    data: UploadFile = File(...)
-    field: str= Form(...)
