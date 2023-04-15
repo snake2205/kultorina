@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from database import Base, engine, SessionLocal, get_session
 from models import models
 from schemas.admin_schemas import DataUpload
+from functions.auth_functions import auth_methods
+from schemas.auth_schemas import User
 
 import json
 
@@ -21,7 +23,8 @@ Base.metadata.create_all(engine)
 @router.post("/data_upload")
 def append(
     form_data: DataUpload = Depends(),    
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: User = Depends(auth_methods.get_current_user),
     ):
     categories = json.loads(form_data.categories.file.read())
     data = json.loads(form_data.data.file.read())
