@@ -3,12 +3,14 @@ import schemas
 import models
 from fastapi.middleware.cors import CORSMiddleware
 from routes.api import router as api_router
+from endpoints.socket import socket_app
 
 
 
 app = FastAPI()
 
 app.include_router(api_router)
+app.mount("/ws", socket_app)
 
 origins = [
     "http://localhost.tiangolo.com",

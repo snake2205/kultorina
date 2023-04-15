@@ -3,10 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 function Question_Form({ inputField, index, changeInputField, removeInputField }) {
-    const [state, updateState] = React.useState();
     const [selected, setSelected] = useState();
-    const forceUpdate = React.useCallback(() => updateState({}), []);
-    const [activated, setActivated] = useState(false);
 
     const FotoQ = ["lokācija", "gadskaitļi", "Karte", "ātrums"];
     const AudioQ = ["komponists", "nosaukums", "gadskaitlis"];

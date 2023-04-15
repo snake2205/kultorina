@@ -3,16 +3,13 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useToken } from "../hooks/useToken";
 import { useState, useEffect } from "react";
-import  Question_Form  from "./question_form";
+import Question_Form from "./question_form";
+import { Link, Navigate } from "react-router-dom";
 
 function Make_Quiz_Form() {
-    const [state, updateState] = React.useState();
-    //const forceUpdate = React.useCallback(() => updateState({}), []);
-    const [selected, setSelected] = useState();
-    const { register, handleSubmit } = useForm();
-
     const FotoQ = ["lokācija", "gadskaitļi", "Karte", "ātrums"];
     const AudioQ = ["komponists", "nosaukums", "gadskaitlis"];
+    const [redirect, setRedirect] = useState();
 
     let options = null;
     let type = null;
@@ -74,11 +71,11 @@ function Make_Quiz_Form() {
         payload.append("data", arr);
         axios.post("http://127.0.0.1:8000/quiz/start_quiz", payload)
             .then((res) => {
-                console.log(res);
+                setRedirect(<Navigate to="ws" state={{ id: res.data }} />);
             })
     }
     return (
-        <div className="row">
+        <div className="row flex-grow-1">
             <div className="col-md-8 col-12 mx-auto">
                 {inputFields.map((input, index) => {
                     return (
@@ -94,6 +91,7 @@ function Make_Quiz_Form() {
                 <button type="button" onClick={addFields}>Pievieno jaunu lauku beigās!</button>
                 <button type="button" onClick={refreshAll}> Atsvaidzini visu! </button>
                 <button type="button" onClick={startQuiz}> Submit </button>
+                { redirect }
             </div>
         </div>
     );
