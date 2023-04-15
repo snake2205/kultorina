@@ -10,15 +10,12 @@ from schemas.quiz_schemas import MakeQuiz, ReportQuestion, StartQuiz
 from sqlalchemy.sql import text
 from  sqlalchemy.sql.expression import func, not_
 import json
-import socketio
 
 router = APIRouter(
     prefix="/quiz",
     tags=["Quiz"],
     responses={404: {"description": "Not found"}},
 )
-sio = socketio.AsyncServer(cors_allowed_origins='*', async_mode='asgi')
-socketio_app = socketio.ASGIApp(sio, router)
 
 Base.metadata.create_all(engine)
 
@@ -81,19 +78,5 @@ def Start_Quiz(
     
     return id
 
-@router.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    i=0
-    while True:
-        await websocket.send_text(str(i))
-        time.sleep(1);
-        i+=1
 
-@sio.event
-def my_event(sid, data):
-    return 1
 
-@sio.event
-def connect(sid, environ, auth):
-    print('connect ', sid)
