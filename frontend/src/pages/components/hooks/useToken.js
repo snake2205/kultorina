@@ -7,14 +7,14 @@ export function useToken() {
             return false;
         } else {
             const userToken = JSON.parse(tokenString);
-            return userToken;
+            return { 'Authorization': userToken.Authorization };
         }
     };
 
     const [ token, setToken, destroyToken ] = useState(getToken());
 
     const saveToken = userToken => {
-        sessionStorage.setItem('token', JSON.stringify(userToken));
+        sessionStorage.setItem('token', JSON.stringify({Authorization:"Bearer "+userToken.access_token}));
         setToken(userToken.token);
     };
 

@@ -76,7 +76,12 @@ function Links() {
             <a href="/make_quiz" className="nav-link text-truncate">
                 <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Play quiz</span>
             </a>
-            </div>
+        </div>
+        <div className="row p-2">
+            <a href="/data_upload" className="nav-link text-truncate">
+                <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Data upload</span>
+            </a>
+        </div>
         </>
     );
 }

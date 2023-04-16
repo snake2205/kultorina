@@ -18,7 +18,7 @@ function Data_Upload_Form() {
         payload.append(`categories`, data.categories[0]); {/* pievieno payload datus no formas */ }
         payload.append(`field`, data.field);
         payload.append(`data`, data.data[0]);
-        axios.post("http://127.0.0.1:8000/admin/data_upload", payload)
+        axios.post("http://127.0.0.1:8000/admin/data_upload", payload, { headers:  token  } )
             .then((res) => { setError(res.data.detail);})
             .catch((err) => {
                 setError(return_error(err));
