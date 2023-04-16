@@ -10,6 +10,7 @@ function Make_Quiz_Form() {
     const FotoQ = ["lokācija", "gadskaitļi", "Karte", "ātrums"];
     const AudioQ = ["komponists", "nosaukums", "gadskaitlis"];
     const [redirect, setRedirect] = useState();
+    const { token, setToken } = useToken();
 
     let options = null;
     let type = null;
@@ -48,7 +49,7 @@ function Make_Quiz_Form() {
         const payload = new FormData();
         payload.append("field", data.map((e) => e.field));
         payload.append("question", data.map((e) => e.question));
-        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload)
+        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload, { headers: token })
             .then((res) => {
                 data.forEach((e, i) => {
                     e.quest = res.data[i];
@@ -69,7 +70,7 @@ function Make_Quiz_Form() {
         })
         var arr = JSON.stringify(arr);
         payload.append("data", arr);
-        axios.post("http://127.0.0.1:8000/quiz/start_quiz", payload)
+        axios.post("http://127.0.0.1:8000/quiz/start_quiz", payload, { headers: token })
             .then((res) => {
                 setRedirect(<Navigate to="ws" state={{ id: res.data }} />);
             })

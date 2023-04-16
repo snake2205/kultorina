@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useToken } from "../hooks/useToken";
 
 function Question_Form({ inputField, index, changeInputField, removeInputField }) {
     const [selected, setSelected] = useState();
@@ -78,11 +79,12 @@ function NotActiveQuestion({ inputField, index, changeSelectOptionHandler, handl
 }
 
 function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFormChange, removeInputField, changeInputField}) {
+    const { token, setToken } = useToken();
     const refresh = (index) => {
         const payload = new FormData();
         payload.append("field", inputField.field);
         payload.append("question", inputField.question);
-        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload)
+        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload, { headers: token })
             .then((res) => {
                 inputField.quest = res.data[0];
                 inputField.activated = true;
@@ -95,7 +97,7 @@ function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFor
         const payload = new FormData();
         payload.append("field", inputField.field);
         payload.append("id", inputField.quest.id);
-        axios.post("http://127.0.0.1:8000/quiz/report_question", payload)
+        axios.post("http://127.0.0.1:8000/quiz/report_question", payload, { headers: token })
             .then((res) => {
                 console.log(res);
                 //forceUpdate();

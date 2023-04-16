@@ -9,8 +9,10 @@ backend:
 	pydantic
 	uvicorn
 	jwt
+	python-socketio
 frontend:
 	node.js
+	client-socket.io ??
 	reactjs
 	react-router-dom
 	axios
