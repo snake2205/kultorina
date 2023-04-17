@@ -53,12 +53,12 @@ def Report_Question(
     current_user: User = Depends(auth_methods.get_current_user),
     ):
     id_field = session.query(models.Fields).filter(models.Fields.name.contains(form_data.field)).first().id
-    if session.query(models.ReportedQuestions).filter_by(field_id = id_field, report_id = int(form_data.id)).first():
+    if session.query(models.ReportedQuestions).filter_by(field_id = id_field, data_id = int(form_data.id)).first():
         v = session.query(models.ReportedQuestions).filter_by(field_id = id_field, report_id = int(form_data.id)).first().votes
-        session.query(models.ReportedQuestions).filter_by(field_id = id_field, report_id = int(form_data.id)).update({models.ReportedQuestions.votes: v+1} )
+        session.query(models.ReportedQuestions).filter_by(field_id = id_field, data_id = int(form_data.id)).update({models.ReportedQuestions.votes: v+1} )
         session.commit()
     else:
-        question = models.ReportedQuestions(report_id = int(form_data.id), field_id = id_field)
+        question = models.ReportedQuestions(data_id = int(form_data.id), field_id = id_field)
         session.add(question)
         session.commit()
 
