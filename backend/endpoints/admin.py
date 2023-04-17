@@ -59,7 +59,10 @@ def append(
     return {"detail": "Tika pievienotas " + str(c) + " kategorijas un " + str(q) + " jautājumi"  }
 
 @router.post("/reported_questions")
-def Reported_questions(session: Session = Depends(get_session)):
+def Reported_questions(
+    session: Session = Depends(get_session),
+    current_user: User = Depends(auth_methods.get_current_user),
+    ):
       id = session.query(models.ReportedQuestions).first().id
       data_id = session.query(models.ReportedQuestions).first().data_id
       value =  session.query(models.ReportedQuestions).filter_by(id=id).first().votes
