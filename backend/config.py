@@ -4,4 +4,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 10
 
 DBUrl = 'mysql://root:pienadiena@localhost/kultorina_demo'
 
+PEPPER = "chichadzintars"
+
 
