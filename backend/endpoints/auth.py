@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from schemas.auth_schemas import Token, User, UserSignUp
+from schemas.auth_schemas import Token, TokenData, User, UserSignUp
 from schemas.user import LoginItem
 from functions.auth_functions import auth_methods
 

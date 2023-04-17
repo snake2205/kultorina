@@ -4,6 +4,10 @@ from fastapi import Form, File, UploadFile
 
 from dataclasses import dataclass
 
+
+class TokenData(BaseModel):
+    username: Union[str, None] = None
+
 class Token(BaseModel):
     access_token: str
     token_type: str

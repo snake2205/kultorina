@@ -9,3 +9,12 @@ class DataUpload:
     categories: UploadFile = File(...)
     data: UploadFile = File(...)
     field: str= Form(...)
+
+@dataclass
+class DeleteReported:
+    id: int= Form(...)
+
+@dataclass
+class DeleteQuestion:
+    id: int= Form(...)
+    data_id:int=Form(...)
