@@ -8,7 +8,7 @@ from models import models
 from passlib.context import CryptContext
 from database import Base, engine, SessionLocal, get_session
 from schemas.auth_schemas import Token, User
-from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, PEPPER
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -26,10 +26,10 @@ class auth_methods():
         return encoded_jwt
 
     def verify_password(plain_password, hashed_password):
-        return pwd_context.verify(plain_password, hashed_password)
+        return pwd_context.verify(plain_password + PEPPER, hashed_password)
 
     def get_password_hash(password):
-        return pwd_context.hash(password)
+        return pwd_context.hash(password + PEPPER)
 
     def authenticate_user(session: Session, username: str, password: str):
         try:
