@@ -45,7 +45,7 @@ class Data(Base):
 class ReportedQuestions(Base):
     __tablename__ = 'reported_questions'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    report_id = Column(Integer, ForeignKey("data.id"))
+    data_id = Column(Integer, ForeignKey("data.id"))
     field_id = Column(Integer, ForeignKey("fields.id"))
     votes = Column(Integer, default=int(1))
     #children = relationship("categories")

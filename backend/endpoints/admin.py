@@ -6,7 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from database import Base, engine, SessionLocal, get_session
 from models import models
-from schemas.admin_schemas import DataUpload
+from schemas.admin_schemas import DataUpload, DeleteReported, DeleteQuestion
 from functions.auth_functions import auth_methods
 from schemas.auth_schemas import User
 
@@ -56,6 +56,40 @@ def append(
     
 
     session.commit()
-    return {"detail": "Tika pievienotas " + str(c) + " kategorijas un " + str(q) + " jautājumi"  } 
+    return {"detail": "Tika pievienotas " + str(c) + " kategorijas un " + str(q) + " jautājumi"  }
+
+@router.post("/reported_questions")
+def Reported_questions(session: Session = Depends(get_session)):
+      id = session.query(models.ReportedQuestions).first().id
+      data_id = session.query(models.ReportedQuestions).first().data_id
+      value =  session.query(models.ReportedQuestions).filter_by(id=id).first().votes
+      image =  session.query(models.Data).filter_by(id=data_id).first().image
+      name = session.query(models.Data).filter_by(id=data_id).first().name
+      url = session.query(models.Data).filter_by(id=data_id).first().url
+      return ({
+          'report id': id,
+          'votes': value,
+          'image': image,
+          'name': name,
+          'url': url
+          } )
+@router.post("/delete_report")
+def Delete_reported (
+      form_data: DeleteReported = Depends(),    
+      session: Session = Depends(get_session)
+      ):
+       session.delete(session.query(models.ReportedQuestions).filter_by(id=form_data.id).first())
+       session.commit()
+       return('darbs padarīts!')
+ 
+@router.post("/delete_question")
+def Delete_question (
+      form_data: DeleteQuestion = Depends(),    
+      session: Session = Depends(get_session)
+      ):
+       session.delete(session.query(models.ReportedQuestions).filter_by(id=form_data.id).first())
+       session.delete(session.query(models.Data).filter_by(id=form_data.data_id).first())
+       session.commit()
+       return('darbs padarīts!')
 
 
