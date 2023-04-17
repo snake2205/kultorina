@@ -26,10 +26,10 @@ class auth_methods():
         return encoded_jwt
 
     def verify_password(plain_password, hashed_password):
-        return pwd_context.verify(plain_password, hashed_password)
+        return pwd_context.verify(plain_password + PEPPER, hashed_password)
 
     def get_password_hash(password):
-        return pwd_context.hash(password) + PEPPER
+        return pwd_context.hash(password + PEPPER)
 
     def authenticate_user(session: Session, username: str, password: str):
         try:

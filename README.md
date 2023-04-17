@@ -31,3 +31,11 @@ front end:
 cmd promptā jāaiziet uz frontend folderi un jāpalaiž
 npm start
 	
+
+DAAAAAAAVIIIIIIIMMMMM
+
+nolādē node.js
+cd kultorina
+cd frontend
+npm start
+screenshoto ja ir errors
