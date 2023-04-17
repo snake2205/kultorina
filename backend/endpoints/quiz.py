@@ -7,9 +7,11 @@ from sqlalchemy.orm import Session
 from database import Base, engine, SessionLocal, get_session
 from models import models
 from schemas.quiz_schemas import MakeQuiz, ReportQuestion, StartQuiz
+from schemas.auth_schemas import User
 from sqlalchemy.sql import text
 from  sqlalchemy.sql.expression import func, not_
 import json
+from functions.auth_functions import auth_methods
 
 router = APIRouter(
     prefix="/quiz",
@@ -22,7 +24,8 @@ Base.metadata.create_all(engine)
 @router.post("/make_quiz")
 def Make_Quiz(
     form_data: MakeQuiz = Depends(),    
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: User = Depends(auth_methods.get_current_user),
     ):
 
     fields = form_data.field.split(",")
@@ -46,7 +49,8 @@ def Make_Quiz(
 @router.post("/report_question")
 def Report_Question(
     form_data: ReportQuestion = Depends(),    
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: User = Depends(auth_methods.get_current_user),
     ):
     id_field = session.query(models.Fields).filter(models.Fields.name.contains(form_data.field)).first().id
     if session.query(models.ReportedQuestions).filter_by(field_id = id_field, report_id = int(form_data.id)).first():
@@ -63,7 +67,8 @@ def Report_Question(
 @router.post("/start_quiz")
 def Start_Quiz(
     form_data: StartQuiz = Depends(),    
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: User = Depends(auth_methods.get_current_user),
     ):
     data = json.loads(form_data.data)
     session.add(models.Quizes(name="myQuiz"))

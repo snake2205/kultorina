@@ -7,8 +7,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from models import models
 from passlib.context import CryptContext
 from database import Base, engine, SessionLocal, get_session
-from schemas.auth_schemas import Token, TokenData, User
-from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from schemas.auth_schemas import Token, User
+from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, PEPPER
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -26,10 +26,10 @@ class auth_methods():
         return encoded_jwt
 
     def verify_password(plain_password, hashed_password):
-        return pwd_context.verify(plain_password, hashed_password)
+        return pwd_context.verify(plain_password + PEPPER, hashed_password)
 
     def get_password_hash(password):
-        return pwd_context.hash(password)
+        return pwd_context.hash(password + PEPPER)
 
     def authenticate_user(session: Session, username: str, password: str):
         try:
@@ -53,13 +53,16 @@ class auth_methods():
         )
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            username: str = payload.get("sub")
+            username = payload.get("sub")
+            date = payload.get("exp")
             if username is None:
                 raise credentials_exception
-            token_data = TokenData(username=username)
+            if datetime.fromtimestamp(date) < datetime.now():
+                raise Hcredentials_exception
+            token_data = username
         except JWTError:
             raise credentials_exception
-        user = auth_methods.get_user(session, username=token_data.username)
+        user = auth_methods.get_user(session, username=token_data)
         if user is None:
             raise credentials_exception
         return user
