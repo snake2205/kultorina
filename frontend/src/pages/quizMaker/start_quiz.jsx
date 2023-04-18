@@ -8,9 +8,11 @@ function Start_Quiz() {
     const [slide, setSlide] = useState();
     const [run, setRun] = useState(false);
     const [timer, setTimer] = useState();
+    const [code, setCode] = useState();
     useEffect(() => {
         socket.emit("setup_admin", state.id);
         socket.on("connect", () => { console.log(socket.id) });
+        socket.on("start_info", (data) => { setCode(data); console.log(data) });
         socket.on("news", (data) => { console.log(data, socket.connected); });
         socket.on("quiz_end", () => { setSlide(<End />); });
         socket.on("count_down_quiz", (data) => { setSlide(<QuizSlide inputField={data.data} timer={data.time} />); console.log(data.data) });
@@ -18,6 +20,7 @@ function Start_Quiz() {
         setSocketIo(socket)
 
         return () => {
+            socket.off("start_info")
             socket.off("connect");
             socket.off("news");
             socket.off("message");
@@ -32,7 +35,8 @@ function Start_Quiz() {
     }
 
     var component = run === false ?
-        <Button
+        <Start
+            code={ code }
             startQuiz={startQuiz}
         /> :
         slide;
@@ -90,7 +94,7 @@ function QuizSlide({ inputField, timer }) {
     )
 }
 
-function Button({ startQuiz }) {
+function Start({ startQuiz }) {
 
     return (
         <div className="col-12 text-center my-auto">
