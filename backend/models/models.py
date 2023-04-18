@@ -69,3 +69,10 @@ class AllQuizQuestions(Base):
     answer_3 = Column(String(256), nullable=True)
     quiz_id = Column(Integer, ForeignKey("quizes.id"), nullable=False)
     #children = relationship("categories")
+
+class PlayerRooms(Base):
+    __tablename__ = 'player_rooms'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    #quiz_id = Column(Integer, ForeignKey("quizes.id"), nullable=True)
+    code = Column(Integer)
+    people_count = Column(Integer)

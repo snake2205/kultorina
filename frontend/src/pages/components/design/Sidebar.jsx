@@ -8,6 +8,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import "../CSS/css.css"
 
 
 function Sidebar() {
@@ -52,32 +53,32 @@ function DesktopSidebar() {
 function Links() {
     return (
         <>
-        <div className="row p-2">
+        <div className="row p-2 hover">
             <a href="/" className="nav-link text-truncate">
                 <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Home</span>
             </a>
         </div>
-        <div className="row p-2">
+        <div className="row p-2 hover">
             <a href="/login" className="nav-link text-truncate">
                     <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Login</span>
             </a>
         </div>
-        <div className="row p-2">
+        <div className="row p-2 hover">
             <a href="/logout" className="nav-link text-truncate">
                 <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Logout</span>
             </a>
         </div>
-        <div className="row p-2">
+        <div className="row p-2 hover">
             <a href="/signup" className="nav-link text-truncate">
                 <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Signup</span>
             </a>
         </div>
-        <div className="row p-2">
+        <div className="row p-2 hover">
             <a href="/make_quiz" className="nav-link text-truncate">
                 <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Play quiz</span>
             </a>
         </div>
-        <div className="row p-2">
+        <div className="row p-2 hover">
             <a href="/data_upload" className="nav-link text-truncate">
                 <i className="fs-5 bi-house"></i><span className="ms-1 d-inline">Data upload</span>
             </a>
