@@ -9,7 +9,7 @@ function Start_Quiz() {
     const [run, setRun] = useState(false);
     const [timer, setTimer] = useState();
     useEffect(() => {
-        socket.emit("setup", state.id);
+        socket.emit("setup_admin", state.id);
         socket.on("connect", () => { console.log(socket.id) });
         socket.on("news", (data) => { console.log(data, socket.connected); });
         socket.on("quiz_end", () => { setSlide(<End />); });
@@ -27,7 +27,7 @@ function Start_Quiz() {
     },[])
 
     const startQuiz = () => {
-        socket.emit("start_quiz");  
+        socket.emit("start_quiz_admin");  
         setRun(true);
     }
 
@@ -74,17 +74,15 @@ function QuizSlide({ inputField, timer }) {
                 <div className="col-2 my-auto text-center"> <h1>{timer}</h1> </div>
             </div>
             <div className="row m-0 pb-5">
-                <div className="bg-white">
-                    <div className="row h-100 flex-grow-1">
-                        <h1 className="text-center">Kur atrodas vieta?</h1>
-                        <div className="col-6">
-                            <button className="btn btn-danger w-100 my-1 h-50">{ answers[0] }</button>
-                            <button className="btn btn-success w-100 my-1 h-50">{answers[1]}</button>
-                        </div>
-                        <div className="col-6">
-                            <button className="btn btn-warning w-100 my-1 h-50">{answers[2]}</button>
-                            <button className="btn btn-primary w-100 my-1 h-50">{answers[3]}</button>
-                        </div>
+                <div className="row h-100 flex-grow-1">
+                    <h1 className="text-center">Kur atrodas vieta?</h1>
+                    <div className="col-6">
+                        <button className="btn btn-danger w-100 my-1 h-50">{ answers[0] }</button>
+                        <button className="btn btn-success w-100 my-1 h-50">{answers[1]}</button>
+                    </div>
+                    <div className="col-6">
+                        <button className="btn btn-warning w-100 my-1 h-50">{answers[2]}</button>
+                        <button className="btn btn-primary w-100 my-1 h-50">{answers[3]}</button>
                     </div>
                 </div>
             </div>

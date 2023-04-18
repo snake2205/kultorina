@@ -7,7 +7,7 @@ function NavBar() {
     return (
         <div className="container-fluid vh-100 d-flex flex-column">
             <div className="d-flex row" style={{ height: "7%" }}>
-                <div className="d-flex flex-sm-column bg-dark align-items-center">
+                <div className="d-flex flex-sm-column bg-dark align-items-end">
                     <button className="btn btn-secondary" data-bs-target="#offcanvas" data-bs-toggle="offcanvas" className="border rounded-3 p-1 text-decoration-none">
                         <i className="bi bi-list bi-lg py-2 p-1"></i>
                     </button>

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 import time
 import asyncio
+import random
 
 sio = socketio.AsyncServer(cors_allowed_origins="*",
             async_mode="asgi",
@@ -17,14 +18,23 @@ def connect(sid, environ, id):
     pass
 
 @sio.event
-async def setup(sid, id):
-    await enter_room(sid)
-    await find_table(sid, id)
+async def setup_admin(sid, id):
+    await make_room_admin(sid)
+    await find_table_admin(sid, id)
 
-async def enter_room(sid):
+async def make_room_admin(sid):
+    session = next(get_session())
+    n = random.randint(10000,99999)
+    n=5
+    if session.query(models.PlayerRooms).filter_by(code=n).first() is None:
+        session.add(models.PlayerRooms(code=n))
+        session.commit()
+        print()
+    else:
+        print("no")
     sio.enter_room(sid, 'chat_users')
 
-async def find_table(sid, id):
+async def find_table_admin(sid, id):
     session = next(get_session())
     quiz = []
     questions = session.query(models.AllQuizQuestions).filter_by(quiz_id=id)
@@ -43,7 +53,7 @@ async def find_table(sid, id):
     await sio.save_session(sid, quiz)
 
 @sio.event
-async def start_quiz(sid):
+async def start_quiz_admin(sid):
     run = True
     quiz = await sio.get_session(sid)
     index = 0
