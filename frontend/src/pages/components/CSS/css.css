@@ -1,10 +1,17 @@
-/* 
-    .color{
-        background-color:red
-    }
-
-*/
+.buttoncol {
+    font-size: 20px;
+    font-family: 'Segoe UI';
+    background-color:#383838;
+    color: #ffffff;
+}
 
 .hover:hover{
     background-color:black;
+}
+.bordermain {
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-color: black;
+    border-width: 2px;
 }
