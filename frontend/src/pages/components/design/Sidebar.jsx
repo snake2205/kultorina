@@ -26,7 +26,7 @@ function MobileSidebar() {
                 <h6 className="offcanvas-title d-none d-sm-block" id="offcanvas">Menu</h6>
                 <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div className="offcanvas-body text-primary text-center">
+            <div className="offcanvas-body text-primary text-left">
                 <div className="col">
                     <Links />
                 </div>
@@ -37,7 +37,7 @@ function MobileSidebar() {
 
 function DesktopSidebar() {
     return (
-        <div className="col-2 bg-dark text-primary text-center h-100 bordermain">
+        <div className="col-2 bg-dark text-primary text-left h-100 bordermain">
             <Links />
         </div>
     );
