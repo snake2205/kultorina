@@ -1,12 +1,15 @@
 .buttoncol {
     font-size: 20px;
     font-family: 'Segoe UI';
-    background-color:#383838;
     color: #ffffff;
 }
+.buttoncolbg {
+    background-color: #383838;
+}
 
-.hover:hover{
-    background-color:black;
+
+.hover:hover {
+    background-color: #212121;
 }
 .bordermain {
     border-left-style: solid;
@@ -14,4 +17,41 @@
     border-bottom-style: solid;
     border-color: black;
     border-width: 2px;
+}
+.bodymainbg {
+    background-image: url("../images/bg-kultors.png");
+}
+.titletext {
+    text-align: start;
+    font-size: 75px;
+}
+.sidecol1 {
+    font-size: 22px;
+    font-family: 'Segoe UI';
+    color: red;
+}
+.sidecol2 {
+    font-size: 22px;
+    font-family: 'Segoe UI';
+    color: coral;
+}
+.sidecol3 {
+    font-size: 22px;
+    font-family: 'Segoe UI';
+    color: darkorange;
+}
+.sidecol4 {
+    font-size: 22px;
+    font-family: 'Segoe UI';
+    color: deeppink;
+}
+.sidecol5 {
+    font-size: 22px;
+    font-family: 'Segoe UI';
+    color: rebeccapurple;
+}
+.sidecol6 {
+    font-size: 22px;
+    font-family: 'Segoe UI';
+    color: mediumpurple;
 }
