@@ -13,72 +13,95 @@ sio = socketio.AsyncServer(cors_allowed_origins="*",
             engineio_logger=True)
 socket_app = socketio.ASGIApp(sio)
 
+@sio.event
+def connect(sid, environ, id):
+    pass
 
-class quizAdmin(socketio.AsyncNamespace):
+@sio.event
+async def setup_admin(sid, id):
+    code = await make_room_admin(sid)
+    quiz = await find_table_admin(sid, id)
+    sio.enter_room(sid, code+"admin")
 
-    def connect(sid, environ, id):
-        pass
+    await sio.save_session(sid, {"quiz":quiz, "code":code})
+    await sio.emit("start_info", {"quiz":quiz, "code":code})
 
-    async def setup_admin(sid, id):
-        code = await make_room_admin(sid)
-        quiz = await find_table_admin(sid, id)
-
-        await sio.save_session(sid, {"quiz":quiz, "code":code})
-        await sio.emit("start_info", code)
-
-    async def make_room_admin(sid):
-        session = next(get_session())
-        run = True
-        while run:
-            n = random.randint(10000,99999)
-            if session.query(models.PlayerRooms).filter_by(code=n).first() is None:
-                session.add(models.PlayerRooms(code=n))
-                session.commit()
-                run = False
+async def make_room_admin(sid):
+    session = next(get_session())
+    run = True
+    while run:
+        n = random.randint(10000,99999)
+        if session.query(models.PlayerRooms).filter_by(code=n).first() is None:
+            session.add(models.PlayerRooms(code=n))
+            session.commit()
+            run = False
+    sio.enter_room(sid, str(n))
         
-        return n
+    return str(n)
 
-    async def find_table_admin(sid, id):
-        session = next(get_session())
-        quiz = []
-        questions = session.query(models.AllQuizQuestions).filter_by(quiz_id=id)
-        for i in questions:
-            q = session.query(models.Data).filter_by(id = i.data_id).first()
-            question = {
-                "type":i.type,
-                "image":q.image,
-                "answer":q.name,
-                "fake1" : i.answer_1,
-                "fake2": i.answer_2,
-                "fake3":i.answer_3,
-                "url":q.url
-            }
-            quiz.append(question)
-        return quiz
+async def find_table_admin(sid, id):
+    session = next(get_session())
+    quiz = []
+    questions = session.query(models.AllQuizQuestions).filter_by(quiz_id=id)
+    for i in questions:
+        q = session.query(models.Data).filter_by(id = i.data_id).first()
+        options = [i.answer_1, i.answer_2, i.answer_3, q.name]
+        random.shuffle(options)
+        question = {
+            "type":i.type,
+            "image":q.image,
+            "answer":q.name,
+            "options" : options,
+            "url":q.url
+        }
+        quiz.append(question)
+    return quiz
 
-    async def start_quiz_admin(sid):
-        run = True
-        data = await sio.get_session(sid)
-        quiz = data["quiz"]
-    
-        index = 0
-        quizTime=5
-        c = quizTime
-        breakTime=3
-        while index != len(quiz):
-            if (c == 0):
-                index +=1
-                c = quizTime
-            if index !=len(quiz):
-                if (c==quizTime):
-                    for k in range(breakTime, 0, -1):
-                        await sio.emit("count_down_break", {"time": k, "data": quiz[index]}, room='chat_users')
-                        await asyncio.sleep(1)
-                await sio.emit("count_down_quiz", {"time": c, "data": quiz[index]}, room='chat_users')
-                c-=1
-                await asyncio.sleep(1)
-        await sio.emit("quiz_end", room="chat_users")
-sio.register_namespace(quizAdmin("/quiz_admin"))
+@sio.event
+def connect(sid, environ, id):
+    pass 
+
+
+@sio.event
+async def setup_player(sid, code):
+    sio.enter_room(sid, str(code))
+    session = next(get_session())
+    v = session.query(models.PlayerRooms).filter_by(code=code).first().people_count
+    session.query(models.PlayerRooms).filter_by(code=code).update({models.PlayerRooms.people_count: v+1})
+    session.commit()
+    await sio.emit("player_added", room=str(code)+"admin")
+    await sio.save_session(sid, {"code":str(code), "points":0, "answer":0, "time":0})
+
+@sio.event
+async def submit_answer(sid, answer):
+    data = await sio.get_session(sid)
+    await sio.emit("check_answer", {"answer":answer, "id":sid}, room=str(data["code"])+"admin")
+
+@sio.event
+async def get_quiz_info(sid):
+    data = await sio.get_session(sid)
+    await sio.emit("timer_info", data["quiz"])
+
+@sio.event
+async def broadcast_intro(sid):
+    data = await sio.get_session(sid)
+    await sio.emit("intro",  room=str(data["code"]))
+
+@sio.event
+async def broadcast_question(sid, answers):
+    data = await sio.get_session(sid)
+    await sio.emit("answers", answers,  room=str(data["code"]))
+
+@sio.event
+async def broadcast_end(sid):
+    data = await sio.get_session(sid)
+    await sio.emit("end", room=str(data["code"]))
+
+@sio.event
+async def return_points(sid, data):
+    await sio.emit("send_points", {"points":data["points"]}, room=data["id"])
+
+
            
     
 

@@ -5,69 +5,141 @@ import { useLocation } from 'react-router-dom';
 function Start_Quiz() {
     const [socketIo, setSocketIo] = useState()
     const { state } = useLocation();
-    const [slide, setSlide] = useState();
     const [run, setRun] = useState(false);
-    const [timer, setTimer] = useState();
+    const [players, setPlayers] = useState(0);
     const [code, setCode] = useState();
+    const [questions, setQuestions] = useState([]);
+
     useEffect(() => {
         socket.emit("setup_admin", state.id);
         socket.on("connect", () => { console.log(socket.id) });
-        socket.on("start_info", (data) => { setCode(data); console.log(data) });
-        socket.on("news", (data) => { console.log(data, socket.connected); });
-        socket.on("quiz_end", () => { setSlide(<End />); });
-        socket.on("count_down_quiz", (data) => { setSlide(<QuizSlide inputField={data.data} timer={data.time} />); console.log(data.data) });
-        socket.on("count_down_break", (data) => {setSlide(<Break timer={data.time} inputField={ data.data } />); });
-        setSocketIo(socket)
+        socket.on("start_info", (data) => { setCode(data.code); setQuestions(data.quiz); });
+        setSocketIo(socket);
 
         return () => {
             socket.off("start_info")
             socket.off("connect");
-            socket.off("news");
-            socket.off("message");
-            socket.off("count_down_quiz");
-            socket.off("count_down_break");
         }
-    },[])
+    }, [])
+
+    useEffect(() => {
+        socket.on("player_added", () => { var p = players; setPlayers(p + 1); console.log(players); });
+        return () => {
+            socket.off("player_added");
+        }
+    }, [players])
 
     const startQuiz = () => {
-        socket.emit("start_quiz_admin");  
         setRun(true);
     }
 
     var component = run === false ?
         <Start
-            code={ code }
+            code={code}
             startQuiz={startQuiz}
+            players={players}
         /> :
-        slide;
+        <Timer
+            questions={ questions }
+        />
 
     return (
         <div className="row flex-grow-1 d-flex">
-                { component }
+            {component}
         </div>
     )
+
 }
 
 export default Start_Quiz;
 
-function QuizSlide({ inputField, timer }) {
-    const [answers, setAnswers] = useState([])
+function Timer({questions}){
+    const STATUS = {
+        pause: 0,
+        intro: 1,
+        question: 2,
+        end:3,
+        default:4
+    }
+    const [seconds, setSeconds] = React.useState(5);
+    const [status, setStatus] = React.useState(STATUS.intro);
+    const intervalRef = React.useRef();
+    const [index, setIndex] = useState(0);
+    const pointsForAnswer = 10
+    const [slide, setSlide] = useState();
 
     useEffect(() => {
-        let data = [inputField.answer, inputField.fake2, inputField.fake3, inputField.fake1];
-        let index = data.length,
-            randomIndex;
-        console.log(data);
-        while (index != 0) {
-            // Pick a remaining element.
-            randomIndex = Math.floor(Math.random() * index);
-            index--;
-            // And swap it with the current element.
-            [data[index], data[randomIndex]] = [data[randomIndex], data[index]];
-        }
-        setAnswers(data);
+        socket.emit("broadcast_intro");
     }, [])
 
+    useEffect(() => {
+        socket.on("check_answer", (data) => { if (questions[index - 1]["options"][data["answer"] - 1] === questions[index - 1]["answer"]) { socket.emit("return_points", { "points": pointsForAnswer + seconds, "id": data["id"] }); } console.log(questions[index-1]["answer"]);});
+        return () => {
+            socket.off("check_answer");
+        }
+    }, [seconds, index])
+
+    function countDown() {
+        if (seconds === 0) {
+            if (status === STATUS.intro) {
+                setStatus(STATUS.question);
+                setSeconds(6);
+                socket.emit("broadcast_question", questions[index]["options"]);
+                setSlide(< QuizSlide inputField={questions[index]} timer={seconds} />)
+            } else {
+                if (index === questions.length - 1) {
+                    setStatus(STATUS.end)
+                    socket.emit("broadcast_end");
+                    setSlide(< End />)
+
+                } else {
+                    setStatus(STATUS.intro);
+                    setSlide(< Break inputField={questions[index]} timer={seconds} />)
+                    setSeconds(5);
+                    setIndex(index + 1);
+                    socket.emit("broadcast_intro");
+                    console.log(6);
+                }
+            }
+        } else {
+            setSeconds(sec => sec - 1);
+        }
+    }
+
+    React.useEffect(() => {
+        if (status === STATUS.intro || status ===STATUS.question) {
+            intervalRef.current = setInterval(() => {
+                countDown()
+            }, 1000);
+        } else if (status === STATUS.pause && intervalRef.current) {
+            clearInterval(intervalRef.current)
+        }
+        return () => {
+            clearInterval(intervalRef.current)
+        };
+    }, [seconds, status]);
+
+    var component = status === STATUS.intro ?
+        <Break
+            inputField={questions[index]}
+            timer={seconds}
+        /> :
+    status === STATUS.question ?
+        <QuizSlide
+            inputField={questions[index]}
+            timer={seconds }
+         /> :
+        <p>asd</p>
+        
+
+    return (
+        <div className="row flex-grow-1 d-flex">
+            { component }
+        </div>
+    );
+}
+
+function QuizSlide({ inputField, timer }) {
     return (
         <>
             <div className="row m-0">
@@ -81,12 +153,12 @@ function QuizSlide({ inputField, timer }) {
                 <div className="row h-100 flex-grow-1">
                     <h1 className="text-center">Kur atrodas vieta?</h1>
                     <div className="col-6">
-                        <button className="btn btn-danger w-100 my-1 h-50">{ answers[0] }</button>
-                        <button className="btn btn-success w-100 my-1 h-50">{answers[1]}</button>
+                        <button className="btn btn-danger w-100 my-1 h-50">{ inputField.options[0] }</button>
+                        <button className="btn btn-success w-100 my-1 h-50">{inputField.options[1]}</button>
                     </div>
                     <div className="col-6">
-                        <button className="btn btn-warning w-100 my-1 h-50">{answers[2]}</button>
-                        <button className="btn btn-primary w-100 my-1 h-50">{answers[3]}</button>
+                        <button className="btn btn-warning w-100 my-1 h-50">{inputField.options[2]}</button>
+                        <button className="btn btn-primary w-100 my-1 h-50">{inputField.options[3]}</button>
                     </div>
                 </div>
             </div>
@@ -94,11 +166,13 @@ function QuizSlide({ inputField, timer }) {
     )
 }
 
-function Start({ startQuiz }) {
+function Start({ code, startQuiz, players }) {
 
     return (
         <div className="col-12 text-center my-auto">
+        <h1>{ code }</h1>
         <button className="btn btn-lg btn-danger" type="button" onClick={() => startQuiz()}>start</button>
+        <h2>{players}</h2>
         </div>
             );
 }

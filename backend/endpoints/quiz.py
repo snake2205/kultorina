@@ -6,7 +6,7 @@ import time
 from sqlalchemy.orm import Session
 from database import Base, engine, SessionLocal, get_session
 from models import models
-from schemas.quiz_schemas import MakeQuiz, ReportQuestion, StartQuiz
+from schemas.quiz_schemas import MakeQuiz, ReportQuestion, StartQuiz, JoinQuiz
 from schemas.auth_schemas import User
 from sqlalchemy.sql import text
 from  sqlalchemy.sql.expression import func, not_
@@ -83,5 +83,16 @@ def Start_Quiz(
     
     return id
 
+@router.post("/join_quiz")
+def Join_Quiz(
+    form_data: JoinQuiz = Depends(),    
+    session: Session = Depends(get_session),
+    current_user: User = Depends(auth_methods.get_current_user),
+    ):
+    
+    if session.query(models.PlayerRooms).filter_by(code = form_data.code).first() is not None:
+        return {"detail":True}
+    else:
+        return {"detail":False}
 
 
