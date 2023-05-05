@@ -5,6 +5,7 @@ import { useToken } from "../hooks/useToken";
 import { useState, useEffect } from "react";
 import Question_Form from "./question_form";
 import { Link, Navigate } from "react-router-dom";
+import "../CSS/css.css"
 
 function Make_Quiz_Form() {
     const FotoQ = ["lokācija", "gadskaitļi", "Karte", "ātrums"];
@@ -77,7 +78,7 @@ function Make_Quiz_Form() {
     }
     return (
         <div className="row flex-grow-1">
-            <div className="col-md-8 col-12 mx-auto">
+            <div className="col-md-8 col-12 mx-auto ">
                 {inputFields.map((input, index) => {
                     return (
                         <Question_Form
@@ -89,9 +90,9 @@ function Make_Quiz_Form() {
                             />
                     );
                 })}
-                <button type="button" onClick={addFields}>Pievieno jaunu lauku beigās!</button>
-                <button type="button" onClick={refreshAll}> Atsvaidzini visu! </button>
-                <button type="button" onClick={startQuiz}> Submit </button>
+                <button type="button" className=" sidecol6 hover buttoncolbg buttoncol buttonpad" onClick={addFields}>Pievieno jaunu lauku beigās!</button>
+                <button type="button" className=" sidecol1 hover buttoncolbg buttoncol buttonpad" onClick={refreshAll}> Atsvaidzini visu! </button>
+                <button type="button" className=" sidecol4 hover buttoncolbg buttoncol buttonpad" onClick={startQuiz}> Iesniegt </button>
                 { redirect }
             </div>
         </div>

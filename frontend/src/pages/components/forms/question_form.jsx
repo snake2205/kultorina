@@ -57,17 +57,17 @@ function Question_Form({ inputField, index, changeInputField, removeInputField }
 
 function NotActiveQuestion({ inputField, index, changeSelectOptionHandler, handleFormChange }) {
     return(
-        <div className="row py-2 mx-0">
-            <div className="col-11">
-                <div className="border border-dark border-1 bg-white p-2">
+        <div className="py-3">
+            <div className="col-12">
+                <div className="border border-dark border-1 buttoncolbg p-2 buttoncol">
                     <br />
                     <div className="text-center">
-                        <label>mediju tips: </label>
+                        <label className="buttonpad2">Mediju tips: </label>
                         <select value={inputField.field} defaultValue={inputField.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
                             <option value="foto">Foto</option>
                             <option value="audio">Audio</option>
                         </select>
-                        <label>jautajuma veids: </label>
+                        <label className="buttonpad2" >Jautājuma veids: </label>
                         <select value={inputField.question} defaultValue={inputField.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
                             {inputField.options}
                         </select>
@@ -154,17 +154,17 @@ function OutsideButtons({ report, refresh, removeInputField, index }) {
     return (
         <div className="col">
             <div className="row py-1">
-                <button className="btn btn-danger btn-sm btn-square-md" type="button" onClick={() => report(index)} title="reportēt">
+                <button className="btn btn-danger btn-sm btn-square-md" type="button" onClick={() => report(index)} title="Reportēt">
                     <i className="bi bi-flag"></i>
                 </button>
             </div>
             <div className="row py-1">
-                <button className="btn btn-success btn-sm btn-square-md" type="button" onClick={() => refresh(index)} title="atjaunināt">
+                <button className="btn btn-success btn-sm btn-square-md" type="button" onClick={() => refresh(index)} title="Atjaunināt">
                     <i className="bi bi-arrow-repeat"></i>
                 </button>
             </div>
             <div className="row py-1">
-                <button className="btn btn-secondary btn-sm btn-square-md" type="button" onClick={() => removeInputField(index)} title="dzēst">
+                <button className="btn btn-secondary btn-sm btn-square-md" type="button" onClick={() => removeInputField(index)} title="Dzēst">
                     <i className="bi bi-trash"></i>
                 </button>
             </div>
