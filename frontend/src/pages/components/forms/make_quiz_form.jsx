@@ -41,7 +41,7 @@ function Make_Quiz_Form() {
         let data = [...inputFields];
         let newQuestion = { field: "", type: "", image: "", url: "", id: "", name: "", fakes: "" }
         let newfield = { field: data[data.length - 1].field, question: data[data.length - 1].question, options: data[data.length - 1].options, quest:newQuestion, activated:false }
-        setInputFields([...inputFields, newfield])
+        setInputFields([...inputFields, newfield]);
     }
 
     const refreshAll = (event) => {

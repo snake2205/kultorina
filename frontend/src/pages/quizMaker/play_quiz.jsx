@@ -14,17 +14,17 @@ function Start_Quiz() {
     const [answers, setAnswers] = useState([]);
     const [status, setStatus] = useState(STATUS.intro);
     const [points, setPoints] = useState(0);
-    const [submitAnswer, setSubmitAnswer] = useState(0);
+
 
     useEffect(() => {
         socket.emit("setup_player", state.code);
     }, [])
 
     useEffect(() => {
-        socket.on("send_points", (data) => { let p = points; setPoints(p + data["points"]); });
-        socket.on("intro", () => { setStatus(STATUS.intro); setSlide(<Break />); socket.emit("submit_answer", submitAnswer); console.log(submitAnswer); setSubmitAnswer(0); });
+        socket.on("send_points", (data) => { setPoints(data.points); });
+        socket.on("intro", () => { setStatus(STATUS.intro); setSlide(<Break />);});
         socket.on("answers", (data) => {
-            setStatus(STATUS.question); setAnswers(data); setSlide(<QuizSlide inputField={data} SubmitAnswer={setSubmitAnswer} />); console.log(data); });
+            setStatus(STATUS.question); setAnswers(data); setSlide(<QuizSlide inputField={data} />); console.log(data); });
         socket.on("end", () => {setStatus(STATUS.end); setSlide(<EndSlide points={ points } />)});
         return () => {
             socket.off("send_points");
@@ -32,17 +32,7 @@ function Start_Quiz() {
             socket.off("answers");
             socket.off("end");
         }
-    }, [submitAnswer, points, slide, answers])
-
-    /*var component = status === STATUS.intro ?
-        <Break /> :
-            status === STATUS.question ?
-        <QuizSlide
-                inputField={answers}
-                SubmitAnswer={ setSubmitAnswer }
-        /> :
-            <p>asd</p>*/
-
+    }, [points, slide, answers])
 
     return (
         <div className="row flex-grow-1 d-flex">
@@ -65,8 +55,14 @@ function Break() {
     )
 }
 
-function QuizSlide({ inputField, SubmitAnswer }) {
-
+function QuizSlide({ inputField }) {
+    const [submitAnswer, setSubmitAnswer] = useState(0);
+    const SubmitAnswer = (answer) => {
+        if (submitAnswer != answer) {
+            setSubmitAnswer(answer);
+            socket.emit("submit_answer", answer);
+        }
+    }   
     return (
         <>
             <div className="row m-0 pb-5">

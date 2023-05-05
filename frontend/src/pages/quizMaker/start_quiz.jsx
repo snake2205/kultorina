@@ -6,7 +6,7 @@ function Start_Quiz() {
     const [socketIo, setSocketIo] = useState()
     const { state } = useLocation();
     const [run, setRun] = useState(false);
-    const [players, setPlayers] = useState(0);
+    const [players, setPlayers] = useState([]);
     const [code, setCode] = useState();
     const [questions, setQuestions] = useState([]);
 
@@ -23,7 +23,7 @@ function Start_Quiz() {
     }, [])
 
     useEffect(() => {
-        socket.on("player_added", () => { var p = players; setPlayers(p + 1); console.log(players); });
+        socket.on("player_added", (data) => { if (players.length === 0) { setPlayers([{ "id": data, "points": 0,"tempPoints":0, "name": "dumbass" }]); } else { let p = [...players]; setPlayers([p, { "id": data, "points": 0, "name": "dumbass" }]); console.log(players); } });
         return () => {
             socket.off("player_added");
         }
@@ -37,10 +37,11 @@ function Start_Quiz() {
         <Start
             code={code}
             startQuiz={startQuiz}
-            players={players}
+            players={players.length}
         /> :
         <Timer
-            questions={ questions }
+            questions={questions}
+            playerList={players}
         />
 
     return (
@@ -53,7 +54,7 @@ function Start_Quiz() {
 
 export default Start_Quiz;
 
-function Timer({questions}){
+function Timer({questions, playerList}){
     const STATUS = {
         pause: 0,
         intro: 1,
@@ -67,17 +68,30 @@ function Timer({questions}){
     const [index, setIndex] = useState(0);
     const pointsForAnswer = 10
     const [slide, setSlide] = useState();
+    const [players, setPlayers] = useState(playerList);
 
     useEffect(() => {
         socket.emit("broadcast_intro");
     }, [])
 
     useEffect(() => {
-        socket.on("check_answer", (data) => { if (questions[index - 1]["options"][data["answer"] - 1] === questions[index - 1]["answer"]) { socket.emit("return_points", { "points": pointsForAnswer + seconds, "id": data["id"] }); } console.log(questions[index-1]["answer"]);});
+        socket.on("check_answer", (data) => {
+            if (questions[index]["options"][data["answer"] - 1] === questions[index]["answer"]) {
+                let p = players;
+                let i = p.findIndex(el => el.id == data.id);
+                p[i].tempPoints = pointsForAnswer + seconds;
+                setPlayers(p);
+            } else {
+                let p = players;
+                let i = p.findIndex(el => el.id == data.id);
+                p[i].tempPoints = 0;
+                setPlayers(p);
+            }
+        });
         return () => {
             socket.off("check_answer");
         }
-    }, [seconds, index])
+    }, [seconds, index, players])
 
     function countDown() {
         if (seconds === 0) {
@@ -89,6 +103,21 @@ function Timer({questions}){
             } else {
                 if (index === questions.length - 1) {
                     setStatus(STATUS.end)
+                    let p = players;
+                    p.forEach((el) => {
+                        el.points += el.tempPoints;
+                        el.tempPoints = 0;
+                        console.log(el);
+                        socket.emit("return_points", { "points": el.points, "id": el.id });
+                    })
+                    const sorted = p.sort(
+                        function (a, b) {
+                            return parseFloat(b['points']) - parseFloat(a['points']);
+                        })
+                    if (sorted.length < 3) {
+                        sorted.push({ name: "", points: ""}, { name: "", points: ""})
+                    }
+                    setPlayers(sorted);
                     socket.emit("broadcast_end");
                     setSlide(< End />)
 
@@ -97,8 +126,20 @@ function Timer({questions}){
                     setSlide(< Break inputField={questions[index]} timer={seconds} />)
                     setSeconds(5);
                     setIndex(index + 1);
+                    let p = players;
+                    p.forEach((el) => {
+                        el.points += el.tempPoints;
+                        el.tempPoints = 0;
+                        console.log(el);
+                        socket.emit("return_points", { "points": el.points, "id": el.id });
+                    })
+                    const sorted = p.sort(
+                        function (a, b) {
+                            return parseFloat(b['points']) - parseFloat(a['points']);
+                        })
+
+                    setPlayers(sorted);
                     socket.emit("broadcast_intro");
-                    console.log(6);
                 }
             }
         } else {
@@ -129,7 +170,9 @@ function Timer({questions}){
             inputField={questions[index]}
             timer={seconds }
          /> :
-        <p>asd</p>
+        <End
+            players={players }
+        />
         
 
     return (
@@ -191,12 +234,18 @@ function Break({ inputField, timer }) {
     )
 }
 
-function End() {
+function End({ players }) {
+
     return (
         <>
             <div className="row m-0">
                 <div className="col text-center my-auto mx-auto">
                     <h1>Viktorina beigusies</h1>
+                    <ul>
+                        <h1>1. {players[0].name}  {players[0].points}</h1>
+                        <h1>2. {players[1].name}  {players[1].points}</h1>
+                        <h1>3. {players[2].name}  {players[2].points}</h1>
+                    </ul>
                 </div>
             </div>
         </>

@@ -69,7 +69,7 @@ async def setup_player(sid, code):
     v = session.query(models.PlayerRooms).filter_by(code=code).first().people_count
     session.query(models.PlayerRooms).filter_by(code=code).update({models.PlayerRooms.people_count: v+1})
     session.commit()
-    await sio.emit("player_added", room=str(code)+"admin")
+    await sio.emit("player_added", sid, room=str(code)+"admin")
     await sio.save_session(sid, {"code":str(code), "points":0, "answer":0, "time":0})
 
 @sio.event
