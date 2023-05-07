@@ -129,9 +129,6 @@ function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFor
 function Info({ inputField }) {
     const [state, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
-    useEffect(() => {
-        forceUpdate();
-    })
     return (
         <div>
             <div className="col px-0 text-center">

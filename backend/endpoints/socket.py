@@ -58,9 +58,14 @@ async def find_table_admin(sid, id):
     return quiz
 
 @sio.event
-def connect(sid, environ, id):
-    pass 
-
+async def disconnect(sid):
+    data = await sio.get_session(sid)
+    code=data["code"]
+    session = next(get_session())
+    v = session.query(models.PlayerRooms).filter_by(code=code).first().people_count
+    session.query(models.PlayerRooms).filter_by(code=code).update({models.PlayerRooms.people_count: v-1})
+    session.commit()
+    await sio.emit("player_disconnect", sid, room=str(code)+"admin")
 
 @sio.event
 async def setup_player(sid, code):

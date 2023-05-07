@@ -25,9 +25,11 @@ function Start_Quiz() {
     }, [])
 
     useEffect(() => {
-        socket.on("player_added", (data) => { if (players.length === 0) { setPlayers([{ "id": data, "points": 0,"tempPoints":0, "name": "dumbass" }]); } else { let p = [...players]; setPlayers([p, { "id": data, "points": 0, "name": "dumbass" }]); console.log(players); } });
+        socket.on("player_added", (data) => { if (players.length === 0) { setPlayers([{ "id": data, "points": 0, "tempPoints": 0, "name": "dumbass" }]); } else { let p = [...players]; setPlayers([...p, { "id": data, "points": 0, "name": "dumbass" }]); console.log(players); } });
+        socket.on("player_disconnect", (data) => { let p = [...players]; let i = p.findIndex(el => el.id == data); console.log(players); p.splice(i, 1); setPlayers(p); console.log(players);});
         return () => {
             socket.off("player_added");
+            socket.off("player_disconnect");
         }
     }, [players])
 
@@ -108,17 +110,18 @@ function Timer({questions, playerList, socket}){
                     setStatus(STATUS.end)
                     let p = players;
                     p.forEach((el) => {
+                        var points = el.points + el.tempPoints;
                         el.points += el.tempPoints;
                         el.tempPoints = 0;
                         console.log(el);
-                        socket.emit("return_points", { "points": el.points, "id": el.id });
+                        socket.emit("return_points", { "points": points, "id": el.id });
                     })
                     const sorted = p.sort(
                         function (a, b) {
                             return parseFloat(b['points']) - parseFloat(a['points']);
                         })
                     if (sorted.length < 3) {
-                        sorted.push({ name: "", points: "" }, { name: "", points: "" }, { name: "", points: "" })
+                        sorted.push({ name: "", points: "" }, { name: "", points: "" }, { name: "", points: "" }    )
                     }
                     setPlayers(sorted);
                     socket.emit("broadcast_end");
