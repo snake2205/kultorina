@@ -26,7 +26,7 @@ def getItems(session: Session = Depends(get_session)):
     items = session.query(models.Users).get(1)
     return auth_methods.get_password_hash("root")
 
-@router.post("/login", response_model=Token)
+@router.post("/login")
 def Login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     session: Session = Depends(get_session)
@@ -41,7 +41,8 @@ def Login(
     access_token = auth_methods.create_access_token(
         data={"sub": user.username}
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    admin = user.admin
+    return {"access_token": access_token, "tokn_type": "bearer", "admin": admin}
 
 @router.post("/signup", response_model=Token) # definē šīs funkcijas url, definē izejas datu struktūru (skat schemas.auth_schemas)
 def SignUp(form_data: UserSignUp = Depends(),  session: Session = Depends(get_session)):

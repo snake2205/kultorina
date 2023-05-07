@@ -18,3 +18,11 @@ class DeleteReported:
 class DeleteQuestion:
     id: int= Form(...)
     data_id:int=Form(...)
+
+@dataclass
+class AddAdmin:
+    id: int= Form(...)
+
+@dataclass
+class RemoveAdmin:
+    id: int= Form(...)

@@ -1,7 +1,9 @@
 from decimal import Decimal
 from email.mime import image
+import string
 from tkinter.tix import COLUMN
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from xmlrpc.client import Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, BOOLEAN
 from sqlalchemy.orm import declarative_base, relationship
 from database import Base
 
@@ -16,6 +18,7 @@ class Users(Base):
     username = Column(String(100))
     password = Column(String(100))
     email = Column(String(100))
+    admin = Column(BOOLEAN())
 
 class Fields(Base):
     __tablename__ = 'fields'
