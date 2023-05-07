@@ -41,7 +41,7 @@ def Login(
     access_token = auth_methods.create_access_token(
         data={"sub": user.username}
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "status":"admin"}
 
 @router.post("/signup", response_model=Token) # definē šīs funkcijas url, definē izejas datu struktūru (skat schemas.auth_schemas)
 def SignUp(form_data: UserSignUp = Depends(),  session: Session = Depends(get_session)):

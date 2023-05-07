@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useToken } from "../hooks/useToken";
-import { useState, useEffect } from "react";
+import { useState, useEffect, forceUpdate } from "react";
 import Question_Form from "./question_form";
 import { Link, Navigate } from "react-router-dom";
 
@@ -41,7 +41,7 @@ function Make_Quiz_Form() {
         let data = [...inputFields];
         let newQuestion = { field: "", type: "", image: "", url: "", id: "", name: "", fakes: "" }
         let newfield = { field: data[data.length - 1].field, question: data[data.length - 1].question, options: data[data.length - 1].options, quest:newQuestion, activated:false }
-        setInputFields([...inputFields, newfield])
+        setInputFields([...inputFields, newfield]);
     }
 
     const refreshAll = (event) => {
@@ -76,7 +76,7 @@ function Make_Quiz_Form() {
             })
     }
     return (
-        <div className="row flex-grow-1">
+        <div className="row flex-grow-1 whitetext">
             <div className="col-md-8 col-12 mx-auto">
                 {inputFields.map((input, index) => {
                     return (
@@ -89,9 +89,11 @@ function Make_Quiz_Form() {
                             />
                     );
                 })}
-                <button type="button" onClick={addFields}>Pievieno jaunu lauku beigās!</button>
-                <button type="button" onClick={refreshAll}> Atsvaidzini visu! </button>
-                <button type="button" onClick={startQuiz}> Submit </button>
+                <div className="col-11 text-center">
+                    <button className="buttoncolbg whitetext bordermain mx-1" type="button" onClick={addFields}>Pievieno jaunu lauku beigās!</button>
+                    <button className="buttoncolbg whitetext bordermain mx-1" type="button" onClick={refreshAll}> Atsvaidzini visu! </button>
+                    <button className="buttoncolbg whitetext bordermain mx-1" type="button" onClick={startQuiz}> Submit </button>
+                </div>
                 { redirect }
             </div>
         </div>

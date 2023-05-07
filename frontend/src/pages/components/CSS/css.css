@@ -7,6 +7,10 @@
     background-color: #383838;
 }
 
+.whitetext {
+    font-family: 'Segoe UI';
+    color: #ffffff;
+}
 
 .hover:hover {
     background-color: #212121;
@@ -55,3 +59,95 @@
     font-family: 'Segoe UI';
     color: mediumpurple;
 }
+
+
+.golden {
+    color: darkgoldenrod;
+}
+.silver {
+    color: silver;
+}
+.bronze {
+    color: #CD7F32;
+}
+.green {
+    color: limegreen;
+}
+.red {
+    color: red;
+}
+
+
+.logo {
+    width: 50px;
+}
+
+.btn-start {
+    border: 2px solid black;
+    padding: 14px 28px;
+    cursor: pointer;
+    border-radius: 0px;
+    font-size: 20px;
+}
+
+.btn-red {
+    border-color: red;
+    color: white;
+}
+
+    .btn-red:hover {
+        border-color: red;
+        background-color: darkred;
+        color: white;
+    }
+
+.kahoot-container {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.k-btn {
+    border-radius: 2px;
+    font-size: 20px;
+    color:white;
+}
+
+.k-red {
+    background-color: red;
+    border-color: red;
+}
+    .k-red:hover {
+        background-color: darkred;
+        border-color: darkred;
+    }
+
+.k-green {
+    background-color: darkorange;
+    border-color: darkorange;
+}
+
+    .k-green:hover {
+        background-color: #C16700;
+        border-color: #C16700;
+    }
+.k-blue {
+    background-color: deeppink;
+    border-color: deeppink;
+}
+
+    .k-blue:hover {
+        background-color: #631D3E;
+        border-color: #631D3E;
+    }
+.k-yellow {
+    background-color: rebeccapurple ;
+    border-color: rebeccapurple;
+}
+
+    .k-yellow:hover {
+        background-color: #2F1847;
+        border-color: #2F1847;
+    }
+
+
+

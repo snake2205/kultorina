@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, forceUpdate } from "react";
 import axios from "axios";
 import { useToken } from "../hooks/useToken";
 
@@ -59,16 +59,15 @@ function NotActiveQuestion({ inputField, index, changeSelectOptionHandler, handl
     return(
         <div className="row py-2 mx-0">
             <div className="col-11">
-                <div className="border border-dark border-1 bg-white p-2">
-                    <br />
+                <div className="border border-dark border-1 bg-dark p-2">
                     <div className="text-center">
-                        <label>mediju tips: </label>
-                        <select value={inputField.field} defaultValue={inputField.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
+                        <label>mediju tips: &nbsp; </label>
+                        <select className="buttoncolbg whitetext bordermain" value={inputField.field} defaultValue={inputField.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
                             <option value="foto">Foto</option>
                             <option value="audio">Audio</option>
                         </select>
-                        <label>jautajuma veids: </label>
-                        <select value={inputField.question} defaultValue={inputField.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
+                        <label>&nbsp; jautajuma veids: &nbsp; </label>
+                        <select className="buttoncolbg whitetext bordermain" value={inputField.question} defaultValue={inputField.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
                             {inputField.options}
                         </select>
                     </div>
@@ -106,17 +105,16 @@ function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFor
     return(
         <div className="row py-2 mx-0">
             <div className="col-11">
-                <div className="border border-dark border-1 bg-white p-2">
+                <div className="border border-dark border-1 bg-dark p-2">
                     <Info inputField={inputField} />
-                    <br />
                     <div className="text-center">
-                        <label>mediju tips: </label>
-                        <select value={inputField.field} defaultValue={inputField.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
+                        <label>mediju tips: &nbsp; </label>
+                        <select className="buttoncolbg whitetext bordermain" value={inputField.field} defaultValue={inputField.field} name="field" id="field" onChange={event => changeSelectOptionHandler(index, event)}>
                             <option value="foto">Foto</option>
                             <option value="audio">Audio</option>
                         </select>
-                        <label>jautajuma veids: </label>
-                        <select value={inputField.question} defaultValue={inputField.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
+                        <label>&nbsp; jautajuma veids: &nbsp; </label>
+                        <select className="buttoncolbg whitetext bordermain" value={inputField.question} defaultValue={inputField.question} name="question" id="question" onChange={event => handleFormChange(index, event)}>
                             {inputField.options}
                         </select>
                     </div>
@@ -129,23 +127,27 @@ function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFor
 
 
 function Info({ inputField }) {
+    const [state, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
+    useEffect(() => {
+        forceUpdate();
+    })
     return (
         <div>
             <div className="col px-0 text-center">
                 <img className="img-fluid" src={inputField.quest.image} width="500px"></img>
             </div>
-            <br />
-            <p className="text-center">Kur atrodas šī vieta?</p>
-            <div className="text-left">
-                <p>Atbildes:</p>
+            <h2 className="text-center">Kur atrodas šī vieta?</h2>
+            <div className="buttoncolbg my-2 py-2">
+                <h3>Atbildes:</h3>
                 <ul>
-                    <li>{inputField.quest.name}</li>
+                    <li className="green">{inputField.quest.name}</li>
                     <li>{inputField.quest.fakes[0]}</li>
                     <li>{inputField.quest.fakes[1]}</li>
                     <li>{inputField.quest.fakes[2]}</li>
                 </ul>
+                <div className="text-center"><a href={inputField.quest.url}>{inputField.quest.url}</a></div>
             </div>
-        <a href={inputField.quest.url}>{inputField.quest.url}</a>
         </div>
     )
 }

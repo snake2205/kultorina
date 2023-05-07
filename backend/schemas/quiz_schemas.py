@@ -17,3 +17,7 @@ class StartQuiz:
 class ReportQuestion:
     field: str= Form(...)
     id: int=Form(...)
+
+@dataclass
+class JoinQuiz:
+    code: int=Form(...)

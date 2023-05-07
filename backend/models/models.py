@@ -75,4 +75,4 @@ class PlayerRooms(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     #quiz_id = Column(Integer, ForeignKey("quizes.id"), nullable=True)
     code = Column(Integer)
-    people_count = Column(Integer)
+    people_count = Column(Integer, default=int(0))

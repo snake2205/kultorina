@@ -46,36 +46,42 @@ function DesktopSidebar() {
 function Links() {
     return (
         <>
-            <div className="row p-2 hover bordermain buttoncolbg">
-           <a href="/" className="nav-link text-truncate ">
-                    <i className="fs-5 bi-house sidecol1"></i><span className="ms-1 d-inline buttoncol"> Sākumlapa</span>
+        <div className="row p-2 hover bordermain buttoncolbg">
+        <a href="/" className="nav-link text-truncate ">
+                <i className="fs-5 bi-house sidecol1"></i><span className="ms-1 d-inline buttoncol"> Sākumlapa</span>
+        </a>
+        </div>
+        <div className="row p-2 hover bordermain buttoncolbg">
+            <a href="/login" className="nav-link text-truncate ">
+                <i className="bi bi-door-open sidecol2"></i><span className="ms-1 d-inline buttoncol"> Pieslēgties</span>
+        </a>
+        </div>
+        <div className="row p-2 bordermain hover buttoncolbg">
+            <a href="/logout" className="nav-link text-truncate ">
+                <i className="bi bi-door-closed sidecol3"></i><span className="ms-1 d-inline buttoncol"> Atslēgties</span>
+        </a>
+        </div>
+        <div className="row p-2 hover bordermain buttoncolbg">
+            <a href="/signup" className="nav-link text-truncate ">
+                <i className="bi bi-pencil-square sidecol4"></i><span className="ms-1 d-inline buttoncol"> Reģistrēties</span>
+        </a>
+        </div>
+        <div className="row p-2 hover bordermain buttoncolbg">
+            <a href="/make_quiz" className="nav-link text-truncate ">
+                <i className="bi bi-play-fill sidecol5"></i><span className="ms-1 d-inline buttoncol"> Spēlēt viktorīnu</span>
+        </a>
+        </div>
+        <div className="row p-2 hover bordermain buttoncolbg">
+            <a href="/data_upload" className="nav-link text-truncate ">
+                <i className="bi bi-upload sidecol6"></i><span className="ms-1 d-inline buttoncol"> Datu augšupielāde</span>
+        </a>
+        </div>
+        <div className="row p-2 hover bordermain buttoncolbg">
+            <a href="/join_quiz" className="nav-link text-truncate ">
+                <i className="bi bi-upload sidecol6"></i><span className="ms-1 d-inline buttoncol"> Piedalies vikorina!</span>
             </a>
         </div>
-            <div className="row p-2 hover bordermain buttoncolbg">
-                <a href="/login" className="nav-link text-truncate ">
-                    <i className="bi bi-door-open sidecol2"></i><span className="ms-1 d-inline buttoncol"> Pieslēgties</span>
-            </a>
-        </div>
-            <div className="row p-2 bordermain hover buttoncolbg">
-                <a href="/logout" className="nav-link text-truncate ">
-                    <i className="bi bi-door-closed sidecol3"></i><span className="ms-1 d-inline buttoncol"> Atslēgties</span>
-            </a>
-        </div>
-            <div className="row p-2 hover bordermain buttoncolbg">
-                <a href="/signup" className="nav-link text-truncate ">
-                    <i className="bi bi-pencil-square sidecol4"></i><span className="ms-1 d-inline buttoncol"> Reģistrēties</span>
-            </a>
-        </div>
-            <div className="row p-2 hover bordermain buttoncolbg">
-                <a href="/make_quiz" className="nav-link text-truncate ">
-                    <i className="bi bi-play-fill sidecol5"></i><span className="ms-1 d-inline buttoncol"> Spēlēt viktorīnu</span>
-            </a>
-        </div>
-            <div className="row p-2 hover bordermain buttoncolbg">
-                <a href="/data_upload" className="nav-link text-truncate ">
-                    <i className="bi bi-upload sidecol6"></i><span className="ms-1 d-inline buttoncol"> Datu augšupielāde</span>
-            </a>
-        </div>
+
         </>
     );
 }
