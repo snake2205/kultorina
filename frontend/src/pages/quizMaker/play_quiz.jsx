@@ -1,4 +1,4 @@
-import { socket } from './socket';
+import  GetSocket  from './socket';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -14,6 +14,7 @@ function Start_Quiz() {
     const [answers, setAnswers] = useState([]);
     const [status, setStatus] = useState(STATUS.intro);
     const [points, setPoints] = useState(0);
+    const [socket, setSocket] = useState(GetSocket());
 
 
     useEffect(() => {
@@ -24,7 +25,7 @@ function Start_Quiz() {
         socket.on("send_points", (data) => { setPoints(data.points); });
         socket.on("intro", () => { setStatus(STATUS.intro); setSlide(<Break />);});
         socket.on("answers", (data) => {
-            setStatus(STATUS.question); setAnswers(data); setSlide(<QuizSlide inputField={data} />); console.log(data); });
+            setStatus(STATUS.question); setAnswers(data); setSlide(<QuizSlide inputField={data} socket={ socket } />); console.log(data); });
         socket.on("end", () => {setStatus(STATUS.end); setSlide(<EndSlide points={ points } />)});
         return () => {
             socket.off("send_points");
@@ -32,7 +33,7 @@ function Start_Quiz() {
             socket.off("answers");
             socket.off("end");
         }
-    }, [points, slide, answers])
+    }, [points, slide, answers, socket])
 
     return (
         <div className="row flex-grow-1 d-flex">
@@ -55,7 +56,7 @@ function Break() {
     )
 }
 
-function QuizSlide({ inputField }) {
+function QuizSlide({ inputField, socket }) {
     const [submitAnswer, setSubmitAnswer] = useState(0);
     const SubmitAnswer = (answer) => {
         if (submitAnswer != answer) {

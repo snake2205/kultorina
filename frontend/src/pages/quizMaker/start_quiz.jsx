@@ -1,6 +1,7 @@
-﻿import { socket } from './socket';
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import "../components/CSS/css.css"
+import GetSocket from './socket';
 
 function Start_Quiz() {
     const [socketIo, setSocketIo] = useState()
@@ -9,6 +10,7 @@ function Start_Quiz() {
     const [players, setPlayers] = useState([]);
     const [code, setCode] = useState();
     const [questions, setQuestions] = useState([]);
+    const [socket, setSocket] = useState(GetSocket());
 
     useEffect(() => {
         socket.emit("setup_admin", state.id);
@@ -42,6 +44,7 @@ function Start_Quiz() {
         <Timer
             questions={questions}
             playerList={players}
+            socket={ socket }
         />
 
     return (
@@ -54,7 +57,7 @@ function Start_Quiz() {
 
 export default Start_Quiz;
 
-function Timer({questions, playerList}){
+function Timer({questions, playerList, socket}){
     const STATUS = {
         pause: 0,
         intro: 1,
@@ -97,7 +100,7 @@ function Timer({questions, playerList}){
         if (seconds === 0) {
             if (status === STATUS.intro) {
                 setStatus(STATUS.question);
-                setSeconds(6);
+                setSeconds(20);
                 socket.emit("broadcast_question", questions[index]["options"]);
                 setSlide(< QuizSlide inputField={questions[index]} timer={seconds} />)
             } else {
@@ -115,7 +118,7 @@ function Timer({questions, playerList}){
                             return parseFloat(b['points']) - parseFloat(a['points']);
                         })
                     if (sorted.length < 3) {
-                        sorted.push({ name: "", points: ""}, { name: "", points: ""})
+                        sorted.push({ name: "", points: "" }, { name: "", points: "" }, { name: "", points: "" })
                     }
                     setPlayers(sorted);
                     socket.emit("broadcast_end");
@@ -188,21 +191,25 @@ function QuizSlide({ inputField, timer }) {
             <div className="row m-0">
                 <div className="col-2"></div>
                 <div className="col-8 text-center my-auto">
-                    <img className="img-fluid" style={{ maxHeight: "300px"}} src={inputField.image}></img>
+                    <img className="img-fluid" style={{ maxHeight: "400px"}} src={inputField.image}></img>
                 </div>
                 <div className="col-2 my-auto text-center"> <h1>{timer}</h1> </div>
             </div>
-            <div className="row m-0 pb-5">
-                <div className="row h-100 flex-grow-1">
-                    <h1 className="text-center">Kur atrodas vieta?</h1>
-                    <div className="col-6">
-                        <button className="btn btn-danger w-100 my-1 h-50">{ inputField.options[0] }</button>
-                        <button className="btn btn-success w-100 my-1 h-50">{inputField.options[1]}</button>
+            <div className="row m-0 flex-grow-1">
+                <div className="flex-grow-1 col-12 text-center bg-dark whitetext kahoot-container p-2">
+                <div className="row">
+                     <h1 className="text-center">Kur atrodas vieta?</h1>
+                </div>
+                <div className="row flex-grow-1 g-0 mb-2">
+                    <div className="col-6 m-0">
+                            <button className="k-btn k-red w-100 h-50">{ inputField.options[0] }</button>
+                            <button className="k-btn k-green w-100 h-50">{inputField.options[1]}</button>
                     </div>
                     <div className="col-6">
-                        <button className="btn btn-warning w-100 my-1 h-50">{inputField.options[2]}</button>
-                        <button className="btn btn-primary w-100 my-1 h-50">{inputField.options[3]}</button>
-                    </div>
+                            <button className="k-btn k-blue w-100 h-50">{inputField.options[2]}</button>
+                            <button className="k-btn k-yellow w-100 h-50">{inputField.options[3]}</button>
+                        </div>
+                        </div>
                 </div>
             </div>
         </>
@@ -212,10 +219,14 @@ function QuizSlide({ inputField, timer }) {
 function Start({ code, startQuiz, players }) {
 
     return (
-        <div className="col-12 text-center my-auto">
-        <h1>{ code }</h1>
-        <button className="btn btn-lg btn-danger" type="button" onClick={() => startQuiz()}>start</button>
-        <h2>{players}</h2>
+        <div className="row m-0">
+            <div className="col-12 col-sm-9 col-md-7 text-center my-auto mx-auto bg-dark whitetext">
+                <h1>kods: {code}</h1>
+                <div className="row buttoncolbg my-1 golden">
+                    <button className="btn-start btn-red buttoncolbg" type="button" onClick={() => startQuiz()}>start</button>
+                </div>
+                <h2>spēlētāji: {players}</h2>
+            </div>
         </div>
             );
 }
@@ -224,8 +235,8 @@ function Break({ inputField, timer }) {
     return (
         <>
             <div className="row m-0">
-                <div className="col-8 text-center my-auto mx-auto">
-                    <img className="img-fluid" style={{ maxHeight: "300px" }} src={inputField.image}></img>
+                <div className="col-12 col-md-10 text-center my-auto mx-auto bg-dark whitetext p-2">
+                    <img className="img-fluid" style={{ maxHeight: "500px" }} src={inputField.image}></img>
                     <h1 className="text-center">Kur atrodas vieta?</h1>
                     <h1>{timer}</h1>
                 </div>
@@ -239,13 +250,34 @@ function End({ players }) {
     return (
         <>
             <div className="row m-0">
-                <div className="col text-center my-auto mx-auto">
-                    <h1>Viktorina beigusies</h1>
-                    <ul>
-                        <h1>1. {players[0].name}  {players[0].points}</h1>
-                        <h1>2. {players[1].name}  {players[1].points}</h1>
-                        <h1>3. {players[2].name}  {players[2].points}</h1>
-                    </ul>
+                <div className="col-12 col-sm-9 col-md-7 text-center my-auto mx-auto bg-dark whitetext">
+                    <h1><b>Uzvarētāji!</b></h1>
+                    <div className="text-start">
+                        <div className="row buttoncolbg my-1 golden">
+                            <div className="col">
+                                <h2 className="text-start">1. {players[0].name}</h2>
+                            </div>
+                            <div className="col">
+                                <h2 className="text-end">{players[0].points}</h2>
+                            </div>
+                        </div>
+                        <div className="row buttoncolbg my-1 silver">
+                            <div className="col">
+                                <h2 className="text-start">1. {players[1].name}</h2>
+                            </div>
+                            <div className="col">
+                                <h2 className="text-end">{players[1].points}</h2>
+                            </div>
+                        </div>
+                        <div className="row buttoncolbg my-1 bronze">
+                            <div className="col">
+                                <h2 className="text-start">1. {players[2].name}</h2>
+                            </div>
+                            <div className="col">
+                                <h2 className="text-end">{players[2].points}</h2>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
