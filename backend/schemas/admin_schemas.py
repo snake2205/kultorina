@@ -18,3 +18,7 @@ class DeleteReported:
 class DeleteQuestion:
     id: int= Form(...)
     data_id:int=Form(...)
+
+@dataclass
+class QuestionSearch:
+    id: int= Form(...)

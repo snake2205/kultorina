@@ -6,7 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from database import Base, engine, SessionLocal, get_session
 from models import models
-from schemas.admin_schemas import DataUpload, DeleteReported, DeleteQuestion
+from schemas.admin_schemas import DataUpload, DeleteReported, DeleteQuestion, QuestionSearch
 from functions.auth_functions import auth_methods
 from schemas.auth_schemas import User
 
@@ -61,7 +61,7 @@ def append(
 @router.post("/reported_questions")
 def Reported_questions(
     session: Session = Depends(get_session),
-    current_user: User = Depends(auth_methods.get_current_user),
+    #current_user: User = Depends(auth_methods.get_current_user),
     ):
       id = session.query(models.ReportedQuestions).first().id
       data_id = session.query(models.ReportedQuestions).first().data_id
@@ -74,7 +74,8 @@ def Reported_questions(
           'votes': value,
           'image': image,
           'name': name,
-          'url': url
+          'url': url,
+          'data id': data_id
           } )
 @router.post("/delete_report")
 def Delete_reported (
@@ -95,4 +96,27 @@ def Delete_question (
        session.commit()
        return('darbs padarīts!')
 
+   
+@router.post("/question_search")
+def Question_Search (
+    form_data: QuestionSearch = Depends(),
+    session: Session = Depends(get_session),
+    #current_user: User = Depends(auth_methods.get_current_user),
+    ):
+   
+     id = session.query(models.Data).filter_by(id=form_data.id).first().id
+     name = session.query(models.Data).filter_by(id=id).first().name
+     url   = session.query(models.Data).filter_by(id=id).first().url
+
+     if hasattr (session.query(models.Data).filter_by(id=form_data.id).first(), 'id'):
+             return ({
+          'id': id,
+ 
+          'name': name,
+          'url': url,
+
+          } )
+     else:
+        return ("neeksiste")
+       
 
