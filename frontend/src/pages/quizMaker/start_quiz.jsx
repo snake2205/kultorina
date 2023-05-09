@@ -26,7 +26,7 @@ function Start_Quiz() {
     }, [])
 
     useEffect(() => {
-        socket.on("player_added", (data) => { if (players.length === 0) { setPlayers([{ "id": data, "points": 0, "tempPoints": 0, "name": "dumbass" }]); } else { let p = [...players]; setPlayers([...p, { "id": data, "points": 0, "name": "dumbass" }]); console.log(players); } });
+        socket.on("player_added", (data) => { if (players.length === 0) { setPlayers([{ "id": data.id, "points": 0, "tempPoints": 0, "name": data.name }]); } else { let p = [...players]; setPlayers([...p, { "id": data.id, "points": 0, "name": data.name }]); console.log(players); } });
         socket.on("player_disconnect", (data) => { let p = [...players]; let i = p.findIndex(el => el.id == data); console.log(players); p.splice(i, 1); setPlayers(p); console.log(players);});
         return () => {
             socket.off("player_added");
@@ -66,7 +66,8 @@ function Timer({questions, playerList, socket}){
         intro: 1,
         question: 2,
         end:3,
-        default:4
+        default: 4,
+        answer:5
     }
     const [seconds, setSeconds] = React.useState(5);
     const [status, setStatus] = React.useState(STATUS.intro);
@@ -79,6 +80,22 @@ function Timer({questions, playerList, socket}){
     useEffect(() => {
         socket.emit("broadcast_intro");
     }, [])
+
+    const Next = () => {
+        if (index === questions.length - 1) {
+            setStatus(STATUS.end)
+            let p = players;
+            if (p.length < 3) {
+                p.push({ name: "", points: "" }, { name: "", points: "" }, { name: "", points: "" })
+            }
+            setPlayers(p);
+            socket.emit("broadcast_end");
+        } else {
+            setStatus(STATUS.intro);
+            setSeconds(6);
+            setIndex(index + 1)
+        }
+    }
 
     useEffect(() => {
         socket.on("check_answer", (data) => {
@@ -103,36 +120,12 @@ function Timer({questions, playerList, socket}){
         if (seconds === 0) {
             if (status === STATUS.intro) {
                 setStatus(STATUS.question);
-                setSeconds(20);
+                setSeconds(6);
                 socket.emit("broadcast_question", questions[index]["options"]);
                 setSlide(< QuizSlide inputField={questions[index]} timer={seconds} />)
             } else {
-                if (index === questions.length - 1) {
-                    setStatus(STATUS.end)
-                    let p = players;
-                    p.forEach((el) => {
-                        var points = el.points + el.tempPoints;
-                        el.points += el.tempPoints;
-                        el.tempPoints = 0;
-                        console.log(el);
-                        socket.emit("return_points", { "points": points, "id": el.id });
-                    })
-                    const sorted = p.sort(
-                        function (a, b) {
-                            return parseFloat(b['points']) - parseFloat(a['points']);
-                        })
-                    if (sorted.length < 3) {
-                        sorted.push({ name: "", points: "" }, { name: "", points: "" }, { name: "", points: "" }    )
-                    }
-                    setPlayers(sorted);
-                    socket.emit("broadcast_end");
-                    setSlide(< End />)
-
-                } else {
-                    setStatus(STATUS.intro);
-                    setSlide(< Break inputField={questions[index]} timer={seconds} />)
-                    setSeconds(5);
-                    setIndex(index + 1);
+                    setStatus(STATUS.answer);
+                    setSeconds(0);
                     let p = players;
                     p.forEach((el) => {
                         el.points += el.tempPoints;
@@ -147,7 +140,7 @@ function Timer({questions, playerList, socket}){
 
                     setPlayers(sorted);
                     socket.emit("broadcast_intro");
-                }
+               
             }
         } else {
             setSeconds(sec => sec - 1);
@@ -176,7 +169,13 @@ function Timer({questions, playerList, socket}){
         <QuizSlide
             inputField={questions[index]}
             timer={seconds }
-         /> :
+            /> :
+            status === STATUS.answer ?
+                <AnswerSlide
+                    inputField={questions[index]}
+                    timer={seconds}
+                    Next={Next}
+                /> :
         <End
             players={players }
         />
@@ -220,6 +219,31 @@ function QuizSlide({ inputField, timer }) {
     )
 }
 
+function AnswerSlide({ inputField, timer, Next }) {
+    return (
+        <>
+            <div className="row m-0">
+                <div className="col-2"></div>
+                <div className="col-8 text-center my-auto">
+                    <img className="img-fluid" style={{ maxHeight: "400px" }} src={inputField.image}></img>
+                </div>
+                <div className="col-2 my-auto text-center"> <h1>{timer}</h1>
+                    <button className="btn btn-primary" onClick={() => Next()}><i className="my-auto bi bi-arrow-right-circle whitetext"></i></button>
+                </div>
+            </div>
+            <div className="row m-0 flex-grow-1">
+                <div className="flex-grow-1 col-12 text-center bg-dark whitetext kahoot-container p-2">
+                    <div className="row">
+                        <h1 className="text-center">Pareizā atbilde:</h1>
+                    </div>
+                    <div className="row flex-grow-1 g-0 mb-2">
+                        <button className="k-btn k-success w-100 h-100">{inputField.answer}</button>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
 function Start({ code, startQuiz, players }) {
 
     return (
@@ -233,6 +257,21 @@ function Start({ code, startQuiz, players }) {
             </div>
         </div>
             );
+}
+
+function Answer({ code, startQuiz, players }) {
+
+    return (
+        <div className="row m-0">
+            <div className="col-12 col-sm-9 col-md-7 text-center my-auto mx-auto bg-dark whitetext">
+                <h1>kods: {code}</h1>
+                <div className="row buttoncolbg my-1 golden">
+                    <button className="btn-start btn-red buttoncolbg" type="button" onClick={() => startQuiz()}>start</button>
+                </div>
+                <h2>spēlētāji: {players}</h2>
+            </div>
+        </div>
+    );
 }
 
 function Break({ inputField, timer }) {
@@ -267,7 +306,7 @@ function End({ players }) {
                         </div>
                         <div className="row buttoncolbg my-1 silver">
                             <div className="col">
-                                <h2 className="text-start">1. {players[1].name}</h2>
+                                <h2 className="text-start">2. {players[1].name}</h2>
                             </div>
                             <div className="col">
                                 <h2 className="text-end">{players[1].points}</h2>
@@ -275,7 +314,7 @@ function End({ players }) {
                         </div>
                         <div className="row buttoncolbg my-1 bronze">
                             <div className="col">
-                                <h2 className="text-start">1. {players[2].name}</h2>
+                                <h2 className="text-start">3. {players[2].name}</h2>
                             </div>
                             <div className="col">
                                 <h2 className="text-end">{players[2].points}</h2>

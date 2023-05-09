@@ -18,7 +18,7 @@ function Start_Quiz() {
 
 
     useEffect(() => {
-        socket.emit("setup_player", state.code);
+        socket.emit("setup_player", { code:state.code, name:state.name });
     }, [])
 
     useEffect(() => {

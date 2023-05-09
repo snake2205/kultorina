@@ -17,12 +17,13 @@ function Join_Quiz_Form() {
     const onSubmit = (data, e) => {
         const payload = new FormData();
         payload.append(`code`, data.code);
+        payload.append(`name`, data.name);
         const url = proxy + "/quiz/join_quiz";
         axios.post(url, payload, { headers: token })
             .then((res) => {
                 if (res.data.detail === true) {
                     console.log(res);
-                    setRedirect(<Navigate to="ws" state={{ code: data.code }} />);
+                    setRedirect(<Navigate to="ws" state={{ code: data.code, name: data.name }} />);
                 }
             })
             .catch((err) => {
@@ -32,7 +33,10 @@ function Join_Quiz_Form() {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
+                <h1>Ievadi kodu!</h1>
                 <input {...register("code")} type="text" /><br />
+                <h1>Ievadi vārdu!</h1>
+                <input {...register("name")} type="text" /><br />
                 <input type="submit" />
             </form>
             <p>{error}</p>

@@ -7,14 +7,14 @@ import time
 import asyncio
 import random
 
-sio = socketio.AsyncServer(cors_allowed_origins=["https://a160-213-226-141-96.ngrok-free.app", "http://localhost:3000"],
+sio = socketio.AsyncServer(cors_allowed_origins="*",
             async_mode="asgi",
             logger=True,
             engineio_logger=True)
 socket_app = socketio.ASGIApp(sio)
 
 @sio.event
-def connect(sid, environ, id):
+def connect(sid, environ):
     pass
 
 @sio.event
@@ -69,13 +69,15 @@ async def disconnect(sid):
     await sio.emit("player_disconnect", sid, room=str(code)+"admin")
 
 @sio.event
-async def setup_player(sid, code):
+async def setup_player(sid, data):
+    code = data["code"]
+    name = data["name"]
     sio.enter_room(sid, str(code))
     session = next(get_session())
     v = session.query(models.PlayerRooms).filter_by(code=code).first().people_count
     session.query(models.PlayerRooms).filter_by(code=code).update({models.PlayerRooms.people_count: v+1})
     session.commit()
-    await sio.emit("player_added", sid, room=str(code)+"admin")
+    await sio.emit("player_added", {"id":sid, "name":name}, room=str(code)+"admin")
     await sio.save_session(sid, {"code":str(code), "points":0, "answer":0, "time":0})
 
 @sio.event

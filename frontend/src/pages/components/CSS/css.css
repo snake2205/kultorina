@@ -149,6 +149,11 @@
         border-color: #2F1847;
     }
 
+.k-success {
+    background-color: green;
+    border-color: green;
+}
+
 .buttonpad {
     padding-top: 5px;
     padding-bottom: 5px;
