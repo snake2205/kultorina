@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./home";
+import Report from "./auth/report";
 import Login from "./auth/login";
 import Signup from "./auth/signup";
 import Logout from "./auth/logout";
@@ -18,6 +19,7 @@ function WSRoutes() {
             <Route path="/" element={ <NavBar />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/report" element={<Report />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/data_upload" element={<Data_Upload />} />

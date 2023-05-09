@@ -95,4 +95,26 @@ def Join_Quiz(
     else:
         return {"detail":False}
 
+@router.post("/report_all")
+def Report_all(    
+    session: Session = Depends(get_session),
+    current_user: User = Depends(auth_methods.get_current_user),
+    ):
+    i=600;
+    while True:
+            id_field = 1;
+            id_data = i
+            if session.query(models.ReportedQuestions).filter_by(field_id = id_field, data_id = id_data).first():
+                v = session.query(models.ReportedQuestions).filter_by(field_id = id_field, data_id = id_data).first().votes
+                session.query(models.ReportedQuestions).filter_by(field_id = id_field, data_id = id_data).update({models.ReportedQuestions.votes: v+1} )
+                session.commit()
+                i+=1;
+            else:
+                question = models.ReportedQuestions(data_id = id_data, field_id = id_field)
+                session.add(question)
+                session.commit()
+                i+=1;
+        
+
+
 
