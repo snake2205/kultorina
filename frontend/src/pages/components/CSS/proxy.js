@@ -1,0 +1,1 @@
+export const proxy = "https://3967-213-226-141-96.ngrok-free.app";

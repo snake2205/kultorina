@@ -14,8 +14,9 @@ function Start_Quiz() {
 
     useEffect(() => {
         socket.emit("setup_admin", state.id);
+        console.log(state.id);
         socket.on("connect", () => { console.log(socket.id) });
-        socket.on("start_info", (data) => { setCode(data.code); setQuestions(data.quiz); });
+        socket.on("start_info", (data) => { setCode(data.code); setQuestions(data.quiz); console.log(data.quiz); });
         setSocketIo(socket);
 
         return () => {

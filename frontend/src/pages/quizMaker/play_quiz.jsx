@@ -23,7 +23,7 @@ function Start_Quiz() {
 
     useEffect(() => {
         socket.on("send_points", (data) => { setPoints(data.points); });
-        socket.on("intro", () => { setStatus(STATUS.intro); setSlide(<Break />);});
+        socket.on("intro", () => { setStatus(STATUS.intro); setSlide(<Break />); console.log(0);});
         socket.on("answers", (data) => {
             setStatus(STATUS.question); setAnswers(data); setSlide(<QuizSlide inputField={data} socket={ socket } />); console.log(data); });
         socket.on("end", () => {setStatus(STATUS.end); setSlide(<EndSlide points={ points } />)});

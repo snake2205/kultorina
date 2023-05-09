@@ -7,7 +7,7 @@ import time
 import asyncio
 import random
 
-sio = socketio.AsyncServer(cors_allowed_origins="*",
+sio = socketio.AsyncServer(cors_allowed_origins=["https://a160-213-226-141-96.ngrok-free.app", "http://localhost:3000"],
             async_mode="asgi",
             logger=True,
             engineio_logger=True)
@@ -22,7 +22,7 @@ async def setup_admin(sid, id):
     code = await make_room_admin(sid)
     quiz = await find_table_admin(sid, id)
     sio.enter_room(sid, code+"admin")
-
+    print(1)
     await sio.save_session(sid, {"quiz":quiz, "code":code})
     await sio.emit("start_info", {"quiz":quiz, "code":code})
 
@@ -55,6 +55,7 @@ async def find_table_admin(sid, id):
             "url":q.url
         }
         quiz.append(question)
+        print(quiz)
     return quiz
 
 @sio.event

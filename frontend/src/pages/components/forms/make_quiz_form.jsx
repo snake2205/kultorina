@@ -5,6 +5,7 @@ import { useToken } from "../hooks/useToken";
 import { useState, useEffect, forceUpdate } from "react";
 import Question_Form from "./question_form";
 import { Link, Navigate } from "react-router-dom";
+import { proxy } from "../CSS/proxy"
 
 function Make_Quiz_Form() {
     const FotoQ = ["lokācija", "gadskaitļi", "Karte", "ātrums"];
@@ -49,7 +50,8 @@ function Make_Quiz_Form() {
         const payload = new FormData();
         payload.append("field", data.map((e) => e.field));
         payload.append("question", data.map((e) => e.question));
-        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload, { headers: token })
+        const url = proxy + "/quiz/make_quiz";
+        axios.post(url, payload, { headers: token })
             .then((res) => {
                 data.forEach((e, i) => {
                     e.quest = res.data[i];
@@ -70,7 +72,8 @@ function Make_Quiz_Form() {
         })
         var arr = JSON.stringify(arr);
         payload.append("data", arr);
-        axios.post("http://127.0.0.1:8000/quiz/start_quiz", payload, { headers: token })
+        const url = proxy + "/quiz/start_quiz"
+        axios.post(url, payload, { headers: token })
             .then((res) => {
                 setRedirect(<Navigate to="ws" state={{ id: res.data }} />);
             })

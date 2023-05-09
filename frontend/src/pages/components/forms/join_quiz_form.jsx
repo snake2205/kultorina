@@ -6,6 +6,7 @@ import { useToken } from "../hooks/useToken";
 import { useState } from "react";
 import { return_error } from "../errors/errorHandling";
 import { Navigate } from "react-router-dom";
+import { proxy } from "../CSS/proxy"
 
 function Join_Quiz_Form() {
     const { register, handleSubmit } = useForm();
@@ -16,10 +17,11 @@ function Join_Quiz_Form() {
     const onSubmit = (data, e) => {
         const payload = new FormData();
         payload.append(`code`, data.code);
-        axios.post("http://127.0.0.1:8000/quiz/join_quiz", payload, { headers: token })
+        const url = proxy + "/quiz/join_quiz";
+        axios.post(url, payload, { headers: token })
             .then((res) => {
                 if (res.data.detail === true) {
-                    console.log(data.code);
+                    console.log(res);
                     setRedirect(<Navigate to="ws" state={{ code: data.code }} />);
                 }
             })
