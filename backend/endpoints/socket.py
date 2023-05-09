@@ -14,7 +14,7 @@ sio = socketio.AsyncServer(cors_allowed_origins="*",
 socket_app = socketio.ASGIApp(sio)
 
 @sio.event
-def connect(sid, environ, id):
+def connect(sid, environ):
     pass
 
 @sio.event
@@ -22,7 +22,7 @@ async def setup_admin(sid, id):
     code = await make_room_admin(sid)
     quiz = await find_table_admin(sid, id)
     sio.enter_room(sid, code+"admin")
-
+    print(1)
     await sio.save_session(sid, {"quiz":quiz, "code":code})
     await sio.emit("start_info", {"quiz":quiz, "code":code})
 
@@ -55,21 +55,29 @@ async def find_table_admin(sid, id):
             "url":q.url
         }
         quiz.append(question)
+        print(quiz)
     return quiz
 
 @sio.event
-def connect(sid, environ, id):
-    pass 
-
+async def disconnect(sid):
+    data = await sio.get_session(sid)
+    code=data["code"]
+    session = next(get_session())
+    v = session.query(models.PlayerRooms).filter_by(code=code).first().people_count
+    session.query(models.PlayerRooms).filter_by(code=code).update({models.PlayerRooms.people_count: v-1})
+    session.commit()
+    await sio.emit("player_disconnect", sid, room=str(code)+"admin")
 
 @sio.event
-async def setup_player(sid, code):
+async def setup_player(sid, data):
+    code = data["code"]
+    name = data["name"]
     sio.enter_room(sid, str(code))
     session = next(get_session())
     v = session.query(models.PlayerRooms).filter_by(code=code).first().people_count
     session.query(models.PlayerRooms).filter_by(code=code).update({models.PlayerRooms.people_count: v+1})
     session.commit()
-    await sio.emit("player_added", sid, room=str(code)+"admin")
+    await sio.emit("player_added", {"id":sid, "name":name}, room=str(code)+"admin")
     await sio.save_session(sid, {"code":str(code), "points":0, "answer":0, "time":0})
 
 @sio.event

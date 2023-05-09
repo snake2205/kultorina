@@ -6,6 +6,7 @@ import { useToken } from "../hooks/useToken";
 import { useState, useEffect } from "react";
 import { return_error } from "../errors/errorHandling";
 import { Navigate } from "react-router-dom";
+import { proxy } from "../CSS/proxy"
 
 function Signup_Form() {
     const { register, handleSubmit } = useForm();
@@ -17,7 +18,8 @@ function Signup_Form() {
         payload.append(`username`, data.username);
         payload.append(`password`, data.password);
         payload.append(`email`, data.email);
-        axios.post("http://127.0.0.1:8000/auth/signup", payload)
+        const url = proxy + "/auth/signup"
+        axios.post(url, payload)
             .then((res) => { setToken(res.data); setError(<Navigate to="/" />);})
             .catch((err) => {
                 setError(return_error(err));

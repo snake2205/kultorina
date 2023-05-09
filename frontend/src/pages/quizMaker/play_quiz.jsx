@@ -18,12 +18,12 @@ function Start_Quiz() {
 
 
     useEffect(() => {
-        socket.emit("setup_player", state.code);
+        socket.emit("setup_player", { code:state.code, name:state.name });
     }, [])
 
     useEffect(() => {
         socket.on("send_points", (data) => { setPoints(data.points); });
-        socket.on("intro", () => { setStatus(STATUS.intro); setSlide(<Break />);});
+        socket.on("intro", () => { setStatus(STATUS.intro); setSlide(<Break />); console.log(0);});
         socket.on("answers", (data) => {
             setStatus(STATUS.question); setAnswers(data); setSlide(<QuizSlide inputField={data} socket={ socket } />); console.log(data); });
         socket.on("end", () => {setStatus(STATUS.end); setSlide(<EndSlide points={ points } />)});
@@ -66,15 +66,15 @@ function QuizSlide({ inputField, socket }) {
     }   
     return (
         <>
-            <div className="row m-0 pb-5">
-                <div className="row h-100 flex-grow-1">
+            <div className="row m-0">
+                <div className="row h-100 flex-grow-1 g-0">
                     <div className="col-6">
-                        <button className="btn btn-danger w-100 my-1 h-50" onClick={() => SubmitAnswer(1)}>{inputField[0]}</button>
-                        <button className="btn btn-success w-100 my-1 h-50" onClick={() => SubmitAnswer(2)}>{inputField[1]}</button>
+                        <button className="k-btn k-red w-100 h-50" onClick={() => SubmitAnswer(1)}>{inputField[0]}</button>
+                        <button className="k-btn k-green w-100 h-50" onClick={() => SubmitAnswer(2)}>{inputField[1]}</button>
                     </div>
                     <div className="col-6">
-                        <button className="btn btn-warning w-100 my-1 h-50" onClick={() => SubmitAnswer(3)}>{inputField[2]}</button>
-                        <button className="btn btn-primary w-100 my-1 h-50" onClick={() => SubmitAnswer(4)}>{inputField[3]}</button>
+                        <button className="k-btn k-blue w-100 h-50" onClick={() => SubmitAnswer(3)}>{inputField[2]}</button>
+                        <button className="k-btn k-yellow w-100 h-50" onClick={() => SubmitAnswer(4)}>{inputField[3]}</button>
                     </div>
                 </div>
             </div>

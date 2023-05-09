@@ -2,6 +2,7 @@
 import { useState, useEffect, forceUpdate } from "react";
 import axios from "axios";
 import { useToken } from "../hooks/useToken";
+import { proxy } from "../CSS/proxy"
 
 function Question_Form({ inputField, index, changeInputField, removeInputField }) {
     const [selected, setSelected] = useState();
@@ -83,7 +84,8 @@ function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFor
         const payload = new FormData();
         payload.append("field", inputField.field);
         payload.append("question", inputField.question);
-        axios.post("http://127.0.0.1:8000/quiz/make_quiz", payload, { headers: token })
+        const url = proxy+"/quiz/make_quiz"
+        axios.post(url, payload, { headers: token })
             .then((res) => {
                 inputField.quest = res.data[0];
                 inputField.activated = true;
@@ -96,7 +98,8 @@ function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFor
         const payload = new FormData();
         payload.append("field", inputField.field);
         payload.append("id", inputField.quest.id);
-        axios.post("http://127.0.0.1:8000/quiz/report_question", payload, { headers: token })
+        const url = proxy + "/quiz/report_question";
+        axios.post(url, payload, { headers: token })
             .then((res) => {
                 console.log(res);
                 //forceUpdate();
@@ -129,9 +132,6 @@ function ActiveQuestion({inputField, index, changeSelectOptionHandler, handleFor
 function Info({ inputField }) {
     const [state, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
-    useEffect(() => {
-        forceUpdate();
-    })
     return (
         <div>
             <div className="col px-0 text-center">

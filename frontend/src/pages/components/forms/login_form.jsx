@@ -6,6 +6,7 @@ import { useToken } from "../hooks/useToken";
 import { useState } from "react";
 import { return_error } from "../errors/errorHandling";
 import { Navigate } from "react-router-dom";
+import { proxy } from "../CSS/proxy"
 
 function Login_Form() {
     const { register, handleSubmit } = useForm(); {/* js hook, kas ļauj izsaukt funkciju un dormas datus  */ }
@@ -16,7 +17,8 @@ function Login_Form() {
         const payload = new FormData(); {/* izveido FormData() instanci payload */ }
         payload.append(`username`, data.username); {/* pievieno payload datus no formas */ }
         payload.append(`password`, data.password);
-        axios.post("http://127.0.0.1:8000/auth/login", payload) 
+        const url = proxy + "/auth/login";
+        axios.post(url, payload) 
             .then((res) => { setToken(res.data); setError(<Navigate to="/" />);})
             .catch((err) => {
                 setError(return_error(err));

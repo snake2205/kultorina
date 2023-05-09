@@ -149,5 +149,32 @@
         border-color: #2F1847;
     }
 
+.k-success {
+    background-color: green;
+    border-color: green;
+}
+
+.buttonpad {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.buttonpad2 {
+    padding-left: 40px;
+    padding-right: 5px;
+}
+
+.gradient {
+    font-family: 'Segoe UI';
+    font-size: 170px;
+    background: -webkit-linear-gradient(135deg, rgba(255,0,0,1) 0%, rgba(255,159,48,1) 33%, rgba(255,47,183,1) 66%, rgba(125,50,255,1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: black;
+}
+
 
 
