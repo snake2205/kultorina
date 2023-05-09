@@ -69,14 +69,20 @@ def Reported_questions(
       image =  session.query(models.Data).filter_by(id=data_id).first().image
       name = session.query(models.Data).filter_by(id=data_id).first().name
       url = session.query(models.Data).filter_by(id=data_id).first().url
-      return ({
-          'report id': id,
-          'votes': value,
-          'image': image,
-          'name': name,
-          'url': url,
-          'data id': data_id
-          } )
+
+      if id > 0:
+          return ({
+              'report id': id,
+              'votes': value,
+              'image': image,
+              'name': name,
+              'url': url,
+              'data id': data_id
+              } )
+      else:
+          return ({
+              'report id': -1
+              } )
 @router.post("/delete_report")
 def Delete_reported (
       form_data: DeleteReported = Depends(),    

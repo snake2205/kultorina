@@ -16,27 +16,23 @@ function Report_Form() {
    window.location.reload();
    };
 
-   const onclick = () => {
+   const Fast = () => {
         const payload = new FormData();
         payload.append('id', data['report id']); 
         axios.post("http://127.0.0.1:8000/admin/delete_report", payload) 
-            .then((res) => {setError(<Navigate to="http://127.0.0.1:8000/admin/reported_questions" />);})};
+            .then((res) => {axios.post('http://127.0.0.1:8000/admin/reported_questions')
+      .then(response => setData(response.data))
+      .catch(error => console.log(error));})};
  
-    const offclick = () => {
+    const Furious = () => {
         const payload = new FormData();
         payload.append('id', data['report id']);
         payload.append('data_id', data['data id']);
         axios.post("http://127.0.0.1:8000/admin/delete_question", payload) 
-            .then((res) => { })};
+            .then((res) => {axios.post('http://127.0.0.1:8000/admin/reported_questions')
+      .then(response => setData(response.data))
+      .catch(error => console.log(error)); })};
 
-        const Fast = () => {
-                    onclick();
-                    reload();
-                    };
-        const Furious = () => {
-                    offclick();
-                    reload();
-                    };
   
   useEffect(() => {
     axios.post('http://127.0.0.1:8000/admin/reported_questions')
