@@ -14,10 +14,6 @@ sio = socketio.AsyncServer(cors_allowed_origins="*",
 socket_app = socketio.ASGIApp(sio)
 
 @sio.event
-def connect(sid, environ):
-    pass
-
-@sio.event
 async def setup_admin(sid, id):
     code = await make_room_admin(sid)
     quiz = await find_table_admin(sid, id)

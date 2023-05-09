@@ -12,6 +12,7 @@ function Make_Quiz_Form() {
     const AudioQ = ["komponists", "nosaukums", "gadskaitlis"];
     const [redirect, setRedirect] = useState();
     const { token, setToken } = useToken();
+    const { error, setError } = useState();
 
     let options = null;
     let type = null;
@@ -59,6 +60,8 @@ function Make_Quiz_Form() {
                     //this.forceUpdate();
                 })
                 setInputFields([...data]);
+            }).catch((err) => {
+                setError("pieslēdzies sistēmai!");
             })
     }
 
@@ -97,7 +100,8 @@ function Make_Quiz_Form() {
                     <button className="buttoncolbg whitetext bordermain mx-1" type="button" onClick={refreshAll}> Atsvaidzini visu! </button>
                     <button className="buttoncolbg whitetext bordermain mx-1" type="button" onClick={startQuiz}> Submit </button>
                 </div>
-                { redirect }
+                {redirect}
+                { error}
             </div>
         </div>
     );
