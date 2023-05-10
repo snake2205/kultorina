@@ -67,7 +67,7 @@ class AllQuizQuestions(Base):
     answer_1 = Column(String(256), nullable=True)
     answer_2 = Column(String(256), nullable=True)
     answer_3 = Column(String(256), nullable=True)
-    quiz_id = Column(Integer, ForeignKey("quizes.id"), nullable=False)
+    quiz_id = Column(Integer, nullable=False)
     #children = relationship("categories")
 
 class PlayerRooms(Base):

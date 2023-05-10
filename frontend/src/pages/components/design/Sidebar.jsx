@@ -70,17 +70,23 @@ function Links() {
             <a href="/make_quiz" className="nav-link text-truncate ">
                 <i className="bi bi-play-fill sidecol5"></i><span className="ms-1 d-inline buttoncol"> Spēlēt viktorīnu</span>
         </a>
-        </div>
+            </div>
+        <div className="row p-2 hover bordermain buttoncolbg">
+            <a href="/join_quiz" className="nav-link text-truncate ">
+                    <i className="bi bi-braces sidecol6"></i><span className="ms-1 d-inline buttoncol"> Piedalies viktorīnā!</span>
+            </a>
+            </div>
         <div className="row p-2 hover bordermain buttoncolbg">
             <a href="/data_upload" className="nav-link text-truncate ">
                 <i className="bi bi-upload sidecol6"></i><span className="ms-1 d-inline buttoncol"> Datu augšupielāde</span>
-        </a>
-        </div>
-        <div className="row p-2 hover bordermain buttoncolbg">
-            <a href="/join_quiz" className="nav-link text-truncate ">
-                <i className="bi bi-upload sidecol6"></i><span className="ms-1 d-inline buttoncol"> Piedalies vikorina!</span>
-            </a>
-        </div>
+                </a>
+                </div>
+            <div className="row p-2 hover bordermain buttoncolbg">
+                <a href="/report" className="nav-link text-truncate ">
+                    <i className="bi bi-eye sidecol6"></i><span className="ms-1 d-inline buttoncol"> Apskati reportus</span>
+                </a>
+                </div>
+
 
         </>
     );

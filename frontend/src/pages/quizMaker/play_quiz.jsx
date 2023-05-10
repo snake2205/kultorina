@@ -1,4 +1,4 @@
-import  GetSocket  from './socket';
+﻿import  GetSocket  from './socket';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -49,7 +49,7 @@ function Break() {
         <>
             <div className="row m-0">
                 <div className="col-8 text-center my-auto mx-auto">
-                    <p>tlt bus opcijas</p>
+                    <h1>tūlīt būs opcijas</h1>
                 </div>
             </div>
         </>
@@ -88,7 +88,7 @@ function EndSlide({ points }) {
         <>
             <div className="row m-0">
                 <div className="col-8 text-center my-auto mx-auto">
-                    <p>points: { points }</p>
+                    <h1>punkti: { points }</h1>
                 </div>
             </div>
         </>
