@@ -9,5 +9,6 @@ To install the website you need to:
 2. install MySQL workbench. Make a new connection and database. Change the BUrl variable in config.py accordingly.
 3. start the backend and frontend applications using command prompt (backend => "uvicorn main:app --reload";frontend => "npm start")
 
+The website is not done by any means. However the school project it was made for has ended, so it will not be completed.
 
 
