@@ -1,6 +1,6 @@
 # KULTORINA
 
-Kultorina is a website where you can make and play quizes about the culture of Latvia. The questions are made automatically, by using open data ofeered by the National Library of Latvia. 
+Kultorina is a website where you can make and play quizes about the culture of Latvia. The questions are made automatically, by using open data offered by the National Library of Latvia. 
 
 The website uses FastAPI for backend and React.js for frontend as well as MySQL server.
 
