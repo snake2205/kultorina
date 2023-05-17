@@ -4,4 +4,7 @@ Kultorina is a website where you can make and play quizes about the culture of L
 
 The website uses FastAPI for backend and React.js for frontend as well as MySQL server.
 
-To install the website you need to install 
+To install the website you need to:
+1. install backend dependancies (see requirements.txt) and frontend dependencies (see package.json).
+2. install MySQL workbench. Make a new connection and database. Change 
+
