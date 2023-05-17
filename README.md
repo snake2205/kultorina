@@ -8,6 +8,7 @@ To install the website you need to:
 1. install backend dependancies (see requirements.txt) and frontend dependencies (see package.json).
 2. install MySQL workbench. Make a new connection and database. Change the BUrl variable in config.py accordingly.
 3. start the backend and frontend applications using command prompt (backend => "uvicorn main:app --reload";frontend => "npm start")
+4. in the page "datu augšupielāde" add files from data folder accordingly. write foto in the "lauka nosaukums" field. Press submit.
 
 The website is not done by any means. However the school project it was made for has ended, so it will not be completed.
 
