@@ -1,41 +1,7 @@
-# kultorina
-kultorina
+# KULTORINA
 
+Kultorina is a website where you can make and play quizes about the culture of Latvia. The questions are made automatically, by using open data ofeered by the National Library of Latvia. 
 
-lai izmantoto vajag:
-backend:
-	sqlalchemy
-	fastapi
-	pydantic
-	uvicorn
-	jwt
-	python-socketio
-frontend:
-	node.js
-	client-socket.io ??
-	reactjs
-	react-router-dom
-	axios
+The website uses FastAPI for backend and React.js for frontend as well as MySQL server.
 
-un jaizveido mysql datubāze, ar:
-user:root
-password:pienadiena
-nosaukums:kultorina_demo
-
-ALSO lai uzsāktu aplikāciju:
-back end:
-cmd promtā jāaiziet uz backend folderi un jāpalaiž
-uvicorn main:app --reload
-
-front end:
-cmd promptā jāaiziet uz frontend folderi un jāpalaiž
-npm start
-	
-
-DAAAAAAAVIIIIIIIMMMMM
-
-nolādē node.js
-cd kultorina
-cd frontend
-npm start
-screenshoto ja ir errors
+To install the website you need to install 
